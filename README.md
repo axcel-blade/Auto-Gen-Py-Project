@@ -24,6 +24,21 @@ Ideal for:
 
 ---
 
+## 🚀 Installation
+
+Before installing, upgrade the build package:
+
+```bash
+python -m pip install --upgrade build
+```
+
+Then install the package:
+
+```bash
+python -m pip install .
+```
+---
+
 ## 🚀 Usage
 
 Generate a new Python project:

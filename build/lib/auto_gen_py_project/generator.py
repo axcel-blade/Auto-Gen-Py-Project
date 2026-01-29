@@ -11,7 +11,7 @@ def create_project(project_name: str) -> None:
 
     # Package files
     (package / "__init__.py").write_text("")
-    (package / "core.py").write_text(
+    (package / "main.py").write_text(
         "def hello():\n"
         "    return 'Hello from your new Python project'\n"
     )
