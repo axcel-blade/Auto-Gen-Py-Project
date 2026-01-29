@@ -1,0 +1,9 @@
+auto-gen-py-project @ file:///C:/Users/AXCEL%20BLADE/Desktop/GitHub/auto-gen-py-project
+build==1.4.0
+colorama==0.4.6
+iniconfig==2.3.0
+packaging==26.0
+pluggy==1.6.0
+Pygments==2.19.2
+pyproject_hooks==1.2.0
+pytest==9.0.2

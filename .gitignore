@@ -3,3 +3,4 @@
 **/tests/__pycache__
 **/test_project
 **/.pytest_cache
+**/venv
