@@ -1,14 +1,18 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "auto-gen-py-project"
 version = "0.1.0"
-description = "CLI tool to generate Python project layouts"
+description = "CLI tool to generate standard Python project layouts"
+readme = "README.md"
+license = { text = "MIT" }
 requires-python = ">=3.8"
 authors = [{ name = "Axcel Blade", email = "srikanthfernando3@gmail.com" }]
-license = { text = "MIT" }
 
 [project.scripts]
 auto-gen-py-project = "auto_gen_py_project.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/axcel-blade/auto-gen-py-project"
