@@ -59,7 +59,7 @@ python -m auto_gen_py_project my_project
 
 ```text
 my_project/
-├── my_project/
+├── src/
 │   ├── __init__.py
 │   └── core.py
 ├── tests/
