@@ -16,3 +16,4 @@ auto-gen-py-project = "auto_gen_py_project.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/axcel-blade/auto-gen-py-project"
+Issues = "https://github.com/axcel-blade/auto-gen-py-project"
