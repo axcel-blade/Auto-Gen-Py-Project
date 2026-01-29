@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auto-gen-py-project"
+version = "0.1.0"
+description = "CLI tool to generate standard Python project layouts"
+requires-python = ">=3.8"
+authors = [{ name = "Your Name" }]
+license = { text = "MIT" }
+
+[project.scripts]
+auto-gen-py-project = "auto_gen_py_project.cli:main"
