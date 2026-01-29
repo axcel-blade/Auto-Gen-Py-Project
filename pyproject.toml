@@ -7,7 +7,7 @@ name = "auto-gen-py-project"
 version = "0.1.0"
 description = "CLI tool to generate Python project layouts"
 requires-python = ">=3.8"
-authors = [{ name = "Your Name", email = "your@email.com" }]
+authors = [{ name = "Axcel Blade", email = "srikanthfernando3@gmail.com" }]
 license = { text = "MIT" }
 
 [project.scripts]
