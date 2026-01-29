@@ -1,25 +1,42 @@
 # auto-gen-py-project
 
-🚀 **auto-gen-py-project** is a lightweight Python CLI tool that generates a
-clean, modern, and standard Python project/package layout in seconds.
+🚀 **auto-gen-py-project** is a lightweight Python CLI tool that instantly generates a clean, modern, and standards-compliant Python project structure.
 
-It follows current best practices (PEP 517 / PEP 621) and is ideal for:
-- Python libraries
-- CLI tools
-- ML / AI projects
-- Internal tooling
-- Open-source packages
+Built around current Python best practices (**PEP 517 / PEP 621**), it helps you bootstrap projects consistently and quickly—so you can focus on writing code, not scaffolding.
+
+Ideal for:
+- 📦 Python libraries & packages
+- 🖥️ Command-line tools
+- 🤖 ML / AI projects
+- 🛠️ Internal tooling
+- 🌍 Open-source projects
 
 ---
 
 ## ✨ Features
 
-- 📦 Standard Python package layout
-- ⚡ One-command project generation
-- 🧪 Includes tests by default
-- 🧩 No external dependencies
-- 🛠️ `pyproject.toml` based (modern Python)
-- 🖥️ Cross-platform (Windows, Linux, macOS)
+- 📁 Generates a standard Python package layout
+- ⚡ One-command project creation
+- 🧪 Test setup included by default
+- 🧩 Zero runtime dependencies
+- 🛠️ Fully `pyproject.toml` based (modern Python)
+- 🖥️ Cross-platform: Windows, Linux, macOS
+
+---
+
+## 🚀 Usage
+
+Generate a new Python project:
+
+```bash
+auto-gen-py-project my_project
+```
+
+If the CLI is not available on your PATH:
+
+```bash
+python -m auto_gen_py_project my_project
+```
 
 ---
 
@@ -36,3 +53,19 @@ my_project/
 ├── pyproject.toml
 ├── LICENSE
 └── .gitignore
+```
+
+---
+
+## 📌 Why auto-gen-py-project?
+
+- Enforces consistent project structure
+- Encourages testing from day one
+- Uses modern Python packaging standards
+- Ideal for both quick prototypes and production-ready packages
+
+---
+
+## 📜 License
+
+GNU General Public License v3
