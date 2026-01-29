@@ -2,7 +2,8 @@ from pathlib import Path
 
 def create_project(project_name: str) -> None:
     root = Path(project_name)
-    package_name = project_name.replace("-", "_")
+    #package_name = project_name.replace("-", "_")
+    package_name = "src"
     package = root / package_name
 
     # Create directories
