@@ -1,2 +1,4 @@
 **/auto_gen_py_project.egg-info
 **/auto_gen_py_project/__pycache__
+**/tests/__pycache__
+**/test_project

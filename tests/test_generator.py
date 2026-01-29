@@ -7,6 +7,6 @@ def test_project_creation():
     create_project(name)
 
     assert Path(name).exists()
-    assert Path(name, name, "core.py").exists()
+    assert Path(name, name, "main.py").exists()
 
     shutil.rmtree(name)
