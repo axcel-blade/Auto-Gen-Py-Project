@@ -4,3 +4,5 @@
 **/test_project
 **/.pytest_cache
 **/venv
+**/build
+**/dist
