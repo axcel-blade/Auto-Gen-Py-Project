@@ -1,7 +1,19 @@
 from pathlib import Path
 
-def create_project(project_name: str) -> None:
-    root = Path(project_name)
+def create_project(project_name: str, init_in_current_folder: bool = False) -> None:
+    """
+    Create a new Python project structure.
+    
+    Args:
+        project_name: Name of the project
+        init_in_current_folder: If True, creates files in current folder. 
+                               If False, creates a new folder with project_name
+    """
+    if init_in_current_folder:
+        root = Path(".")
+    else:
+        root = Path(project_name)
+    
     #package_name = project_name.replace("-", "_")
     package_name = "src"
     package = root / package_name
@@ -18,7 +30,7 @@ def create_project(project_name: str) -> None:
     )
 
     # Tests
-    (root / "tests" / "test_core.py").write_text(
+    (root / "tests" / "test_main.py").write_text(
         f"from {package_name}.core import hello\n\n"
         "def test_hello():\n"
         "    assert hello()\n"
@@ -57,4 +69,5 @@ requires-python = ">=3.8"
     # LICENSE
     (root / "LICENSE").write_text("MIT License\n")
 
-    print(f"✅ Project '{project_name}' created successfully")
+    location = "current folder" if init_in_current_folder else f"'{project_name}'"
+    print(f"✅ Project '{project_name}' created successfully in {location}")

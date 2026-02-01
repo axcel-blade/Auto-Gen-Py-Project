@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "auto-gen-py-project"
-version = "0.1.0"
+version = "0.1.1"
 description = "CLI tool to generate standard Python project layouts"
 readme = "README.md"
 license = { text = "GNU General Public License v3 (GPLv3)" }

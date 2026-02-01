@@ -2,6 +2,7 @@
 **/auto_gen_py_project/__pycache__
 **/tests/__pycache__
 **/test_project
+**/test_project_inside
 **/.pytest_cache
 **/venv
 **/build

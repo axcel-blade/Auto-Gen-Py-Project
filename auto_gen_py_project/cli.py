@@ -6,6 +6,11 @@ def main():
         description="Generate a standard Python project structure"
     )
     parser.add_argument("name", help="Project name")
+    parser.add_argument(
+        "-i", "--init",
+        action="store_true",
+        help="Initialize project layout in current folder instead of creating a new folder"
+    )
     args = parser.parse_args()
 
-    create_project(args.name)
+    create_project(args.name, init_in_current_folder=args.init)

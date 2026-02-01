@@ -21,6 +21,7 @@ Ideal for:
 - 🧩 Zero runtime dependencies
 - 🛠️ Fully `pyproject.toml` based (modern Python)
 - 🖥️ Cross-platform: Windows, Linux, macOS
+- 📂 Optional in-place initialization with `-i` flag
 
 ---
 
@@ -41,16 +42,37 @@ python -m pip install .
 
 ## 🚀 Usage
 
-Generate a new Python project:
+### Create a new project folder
+
+Generate a new Python project in a new folder:
 
 ```bash
 auto-gen-py-project my_project
+```
+
+This creates a new folder named `my_project/` with the full project structure inside.
+
+### Initialize in current folder
+
+Initialize the project layout directly in the current folder without creating a subfolder:
+
+```bash
+mkdir my_project
+cd my_project
+auto-gen-py-project my_project -i
+```
+
+Or using the long form:
+
+```bash
+auto-gen-py-project my_project --init
 ```
 
 If the CLI is not available on your PATH:
 
 ```bash
 python -m auto_gen_py_project my_project
+python -m auto_gen_py_project my_project -i
 ```
 
 ---
@@ -61,14 +83,22 @@ python -m auto_gen_py_project my_project
 my_project/
 ├── src/
 │   ├── __init__.py
-│   └── core.py
+│   └── main.py
 ├── tests/
-│   └── test_core.py
+│   └── test_main.py
 ├── README.md
 ├── pyproject.toml
 ├── LICENSE
 └── .gitignore
 ```
+
+---
+
+## 📌 Command Line Options
+
+| Flag | Long Form | Description |
+|------|-----------|-------------|
+| `-i` | `--init` | Initialize project layout in current folder instead of creating a new folder |
 
 ---
 
