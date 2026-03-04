@@ -25,8 +25,11 @@ def create_project(project_name: str, init_in_current_folder: bool = False) -> N
     # Package files
     (package / "__init__.py").write_text("")
     (package / "main.py").write_text(
-        "def hello():\n"
-        "    return 'Hello from your new Python project'\n"
+        "def main():\n"
+        "    print('Hello World!')\n"
+        "\n"
+        "if __name__ == '__main__':\n"
+        "    main()\n"
     )
 
     # Tests
