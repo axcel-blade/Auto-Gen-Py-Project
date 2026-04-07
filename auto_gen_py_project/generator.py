@@ -72,5 +72,22 @@ requires-python = ">=3.8"
     # LICENSE
     (root / "LICENSE").write_text("MIT License\n")
 
+    # run.py
+    (root / "run.py").write_text(
+        '# run.py\n'
+        '"""Project root entry point."""\n'
+        '\n'
+        'import sys\n'
+        'import os\n'
+        '\n'
+        '# Add src/ to path so all modules can import each other by name\n'
+        'sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))\n'
+        '\n'
+        'from main import main\n'
+        '\n'
+        'if __name__ == "__main__":\n'
+        '    main()\n'
+    )
+
     location = "current folder" if init_in_current_folder else f"'{project_name}'"
     print(f"✅ Project '{project_name}' created successfully in {location}")
