@@ -1,74 +1,52 @@
 # auto-gen-py-project
 
-🚀 **auto-gen-py-project** is a lightweight Python CLI tool that instantly generates a clean, modern, and standards-compliant Python project structure.
+🚀 **auto-gen-py-project** is a lightweight Python CLI tool that instantly scaffolds a clean, modern, standards-compliant Python project — so you can skip the boilerplate and get straight to building.
 
-Built around current Python best practices (**PEP 517 / PEP 621**), it helps you bootstrap projects consistently and quickly—so you can focus on writing code, not scaffolding.
-
-Ideal for:
-- 📦 Python libraries & packages
-- 🖥️ Command-line tools
-- 🤖 ML / AI projects
-- 🛠️ Internal tooling
-- 🌍 Open-source projects
+Built around current Python best practices (**PEP 517 / PEP 621**).
 
 ---
 
 ## ✨ Features
 
-- 📁 Generates a standard Python package layout
+- 📁 Standard `src/` layout with a ready-to-run entry point
 - ⚡ One-command project creation
-- 🧪 Test setup included by default
-- 🧩 Zero runtime dependencies
-- 🛠️ Fully `pyproject.toml` based (modern Python)
+- 🧪 Test setup included out of the box
+- 🛠️ Modern `pyproject.toml` based packaging
 - 🖥️ Cross-platform: Windows, Linux, macOS
-- 📂 Optional in-place initialization with `-i` flag
+- 📂 Optional in-place initialization with `-i`
+- 🔗 Zero runtime dependencies
 
 ---
 
 ## 🚀 Installation
 
-Before installing, upgrade the build package:
-
 ```bash
 python -m pip install --upgrade build
-```
-
-Then install the package:
-
-```bash
 python -m pip install .
 ```
+
 ---
 
 ## 🚀 Usage
 
 ### Create a new project folder
 
-Generate a new Python project in a new folder:
-
 ```bash
 auto-gen-py-project my_project
 ```
 
-This creates a new folder named `my_project/` with the full project structure inside.
+Creates a new `my_project/` folder with the full project structure inside.
 
-### Initialize in current folder
-
-Initialize the project layout directly in the current folder without creating a subfolder:
+### Initialize in the current folder
 
 ```bash
-mkdir my_project
-cd my_project
+mkdir my_project && cd my_project
 auto-gen-py-project my_project -i
-```
-
-Or using the long form:
-
-```bash
+# or
 auto-gen-py-project my_project --init
 ```
 
-If the CLI is not available on your PATH:
+### If the CLI is not on your PATH
 
 ```bash
 python -m auto_gen_py_project my_project
@@ -86,10 +64,17 @@ my_project/
 │   └── main.py
 ├── tests/
 │   └── test_main.py
+├── run.py
 ├── README.md
 ├── pyproject.toml
 ├── LICENSE
 └── .gitignore
+```
+
+`run.py` at the project root adds `src/` to the Python path and calls `main()`, giving you a convenient entry point during development:
+
+```bash
+python run.py
 ```
 
 ---
@@ -98,16 +83,7 @@ my_project/
 
 | Flag | Long Form | Description |
 |------|-----------|-------------|
-| `-i` | `--init` | Initialize project layout in current folder instead of creating a new folder |
-
----
-
-## 📌 Why auto-gen-py-project?
-
-- Enforces consistent project structure
-- Encourages testing from day one
-- Uses modern Python packaging standards
-- Ideal for both quick prototypes and production-ready packages
+| `-i` | `--init` | Initialize in the current folder instead of creating a new one |
 
 ---
 
