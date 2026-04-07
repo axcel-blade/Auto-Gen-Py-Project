@@ -1,3 +1,5 @@
+# auto_gen_py_project/generator.py
+
 from pathlib import Path
 
 def create_project(project_name: str, init_in_current_folder: bool = False) -> None:

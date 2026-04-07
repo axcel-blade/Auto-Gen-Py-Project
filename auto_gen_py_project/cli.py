@@ -1,3 +1,5 @@
+# auto_gen_py_project/cli.py
+
 import argparse
 from auto_gen_py_project.generator import create_project
 
