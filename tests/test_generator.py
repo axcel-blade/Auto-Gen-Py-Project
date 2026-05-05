@@ -140,6 +140,15 @@ class TestProjectCreation:
         for file_path in expected_files:
             assert file_path.exists(), f"Expected file {file_path} was not created"
 
+    def test_venv_created_in_new_folder(self):
+        """Test that a .venv is created in the generated project folder"""
+        project_name = "test_project"
+        create_project(project_name)
+
+        venv_path = Path(project_name, ".venv")
+        assert venv_path.exists(), ".venv directory was not created"
+        assert venv_path.is_dir(), ".venv is not a directory"
+
 
 class TestInitInCurrentFolder:
     """Test suite for init in current folder functionality (-i flag)"""
@@ -248,6 +257,15 @@ class TestInitInCurrentFolder:
 
         for file_path in expected_files:
             assert file_path.exists(), f"Expected file {file_path} was not created in current folder"
+
+    def test_init_creates_venv_in_current_folder(self):
+        """Test that .venv is created in current folder for -i mode"""
+        project_name = "my_project"
+        create_project(project_name, init_in_current_folder=True)
+
+        venv_path = Path(".venv")
+        assert venv_path.exists(), ".venv directory was not created in current folder"
+        assert venv_path.is_dir(), ".venv in current folder is not a directory"
 
 
 class TestProjectNames:

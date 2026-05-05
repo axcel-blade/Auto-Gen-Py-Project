@@ -1,11 +1,9 @@
-**/auto_gen_py_project.egg-info
-**/auto_gen_py_project/__pycache__
-**/tests/__pycache__
-**/.pytest_cache
-**/venv
-**/build
-**/dist
+__pycache__/
+dist/
+build/
+my_project/
+auto_gen_py_project.egg-info/
 
-**/my_project
-
+*.pyc
+.env
 CLAUDE.md

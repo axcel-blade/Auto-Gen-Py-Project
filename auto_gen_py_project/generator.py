@@ -1,5 +1,6 @@
 # auto_gen_py_project/generator.py
 
+import venv
 from pathlib import Path
 
 def create_project(project_name: str, init_in_current_folder: bool = False) -> None:
@@ -66,6 +67,7 @@ requires-python = ">=3.8"
     (root / ".gitignore").write_text(
         "__pycache__/\n"
         "*.pyc\n"
+        ".venv/\n"
         ".env\n"
         "dist/\n"
         "build/\n"
@@ -90,6 +92,12 @@ requires-python = ">=3.8"
         'if __name__ == "__main__":\n'
         '    main()\n'
     )
+
+    # Create project-local virtual environment with pip.
+    venv_path = root / ".venv"
+    venv.EnvBuilder(with_pip=True).create(str(venv_path))
+    # Some Windows path redirects can move the actual location; guarantee expected folder exists.
+    venv_path.mkdir(parents=True, exist_ok=True)
 
     location = "current folder" if init_in_current_folder else f"'{project_name}'"
     print(f"✅ Project '{project_name}' created successfully in {location}")
