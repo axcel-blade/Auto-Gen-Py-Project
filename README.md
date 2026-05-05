@@ -1,61 +1,57 @@
 # auto-gen-py-project
 
-🚀 **auto-gen-py-project** is a lightweight Python CLI tool that instantly scaffolds a clean, modern, standards-compliant Python project — so you can skip the boilerplate and get straight to building.
+Simple CLI tool that generates a clean Python project structure with modern packaging files and starter code.
 
-Built around current Python best practices (**PEP 517 / PEP 621**).
+## Description
 
----
+`auto-gen-py-project` scaffolds a standards-aligned Python project so you can skip repetitive setup and start development quickly. It creates a ready-to-run structure that includes a `src/` package, tests, `run.py`, `pyproject.toml`, `README.md`, `LICENSE`, and `.gitignore`. The generated output follows modern Python packaging practices (PEP 517 / PEP 621 style) and supports cross-platform usage on Windows, Linux, and macOS.
 
-## ✨ Features
+## Getting Started
 
-- 📁 Standard `src/` layout with a ready-to-run entry point
-- ⚡ One-command project creation
-- 🧪 Test setup included out of the box
-- 🛠️ Modern `pyproject.toml` based packaging
-- 🖥️ Cross-platform: Windows, Linux, macOS
-- 📂 Optional in-place initialization with `-i`
-- 🔗 Zero runtime dependencies
+### Dependencies
 
----
+- Python 3.8+ recommended
+- `pip` available in your environment
+- Tested for Windows, Linux, and macOS
 
-## 🚀 Installation
+### Installing
+
+Install from this repository root:
 
 ```bash
 python -m pip install --upgrade build
 python -m pip install .
 ```
 
----
+### Executing program
 
-## 🚀 Usage
-
-### Create a new project folder
+Create a new project folder:
 
 ```bash
 auto-gen-py-project my_project
 ```
 
-Creates a new `my_project/` folder with the full project structure inside.
-
-### Initialize in the current folder
+Initialize in the current folder:
 
 ```bash
-mkdir my_project && cd my_project
-auto-gen-py-project my_project -i
-# or
+python -m auto_gen_py_project my_project --init
+```
+
+If the CLI executable is on your `PATH`, you can also run:
+
+```bash
 auto-gen-py-project my_project --init
 ```
 
-### If the CLI is not on your PATH
+During development, you can run:
 
 ```bash
-python -m auto_gen_py_project my_project
-python -m auto_gen_py_project my_project -i
+python run.py
 ```
 
----
+`run.py` adds `src/` to the import path and executes `main()`.
 
-## 📁 Generated Project Structure
+Generated project structure:
 
 ```text
 my_project/
@@ -71,22 +67,35 @@ my_project/
 └── .gitignore
 ```
 
-`run.py` at the project root adds `src/` to the Python path and calls `main()`, giving you a convenient entry point during development:
+## Help
+
+If the command is not recognized, run it via module mode:
 
 ```bash
-python run.py
+python -m auto_gen_py_project --help
 ```
 
----
+If installation issues occur, verify your Python and pip setup:
 
-## 📌 Command Line Options
+```bash
+python --version
+python -m pip --version
+```
 
-| Flag | Long Form | Description |
-|------|-----------|-------------|
-| `-i` | `--init` | Initialize in the current folder instead of creating a new one |
+## Authors
 
----
+- AXCEL BLADE
 
-## 📜 License
+## Version History
 
-GNU General Public License v3
+- 0.1
+  - Initial release with project scaffolding CLI
+
+## License
+
+This project is licensed under the GNU General Public License v3 - see the `LICENSE` file for details.
+
+## Acknowledgments
+
+- Python packaging standards (PEP 517 / PEP 621)
+- GitHub Actions and PyPA publishing workflow references
