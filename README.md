@@ -30,11 +30,6 @@ python -m pip install --upgrade pip build
 python -m pip install .
 ```
 
-Optional GitHub Packages publish setup (repository secrets):
-
-- `GH_PACKAGES_USERNAME`: your GitHub username
-- `GH_PACKAGES_TOKEN`: GitHub Personal Access Token with `write:packages` and `read:packages` (`repo` also required for private repos)
-
 ### Executing program
 
 - Create a new project folder:
@@ -56,9 +51,8 @@ python -m auto_gen_py_project my_project
 python -m auto_gen_py_project my_project --init
 ```
 
-- Trigger package publish to GitHub Packages:
-  - Publish a GitHub release (uses `.github/workflows/github-packages.yml`)
-  - Or run the workflow manually with `workflow_dispatch`
+- Trigger package publish to PyPI:
+  - Publish a GitHub release (uses `.github/workflows/workflow.yml`)
 
 Generated project structure:
 
@@ -111,6 +105,7 @@ Contributions are welcome and appreciated.
 - 0.1.3
   - Align package metadata and version across project files
   - Add `auto-gen-py-project` console command entry point
+  - Remove GitHub Packages workflow and keep PyPI publishing workflow
 - 0.1.2
   - Create `.venv` inside generated project folders (including `--init`)
   - Add `.venv/` to generated `.gitignore`
