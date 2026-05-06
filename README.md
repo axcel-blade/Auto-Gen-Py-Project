@@ -1,4 +1,4 @@
-# auto-gen-py-project
+# Auto Gen Py Project
 
 Simple CLI tool that scaffolds a clean Python project structure with modern packaging files, tests, and a local virtual environment.
 
@@ -108,9 +108,6 @@ Contributions are welcome and appreciated.
 
 ## Version History
 
-- 0.1.4
-  - Bump project version to latest release number
-  - Add GitHub Packages publishing workflow (`github-packages.yml`)
 - 0.1.3
   - Align package metadata and version across project files
   - Add `auto-gen-py-project` console command entry point
