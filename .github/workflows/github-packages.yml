@@ -47,7 +47,7 @@ jobs:
           fi
 
           python -m twine upload \
-            --repository-url "https://pypi.pkg.github.com/${OWNER}/" \
+            --repository-url "https://upload.pypi.pkg.github.com/${OWNER}/" \
             -u "$GH_PACKAGES_USERNAME" \
             -p "$GH_PACKAGES_TOKEN" \
             dist/*
