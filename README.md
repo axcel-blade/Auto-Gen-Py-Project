@@ -99,6 +99,11 @@ Contributions are welcome and appreciated.
 
 ## Version History
 
+- 0.1.4
+  - Bump project version to latest release number
+- 0.1.3
+  - Align package metadata and version across project files
+  - Add `auto-gen-py-project` console command entry point
 - 0.1.2
   - Create `.venv` inside generated project folders (including `--init`)
   - Add `.venv/` to generated `.gitignore`

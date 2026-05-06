@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="auto_gen_py_project",
-    version="0.1.2",
+    name="auto-gen-py-project",
+    version="0.1.4",
     description="A Python project that auto-generates Python code",
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
@@ -18,6 +18,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
+            "auto-gen-py-project=auto_gen_py_project.cli:main",
             "auto_gen_py_project=auto_gen_py_project.cli:main",
         ],
     },
