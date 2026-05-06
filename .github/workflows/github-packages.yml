@@ -1,0 +1,53 @@
+name: Publish to GitHub Packages
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: github-packages-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PYTHON_VERSION: "3.x"
+  OWNER: ${{ github.repository_owner }}
+
+jobs:
+  build-and-publish:
+    name: Build and publish package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Build distributions
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m build
+
+      - name: Publish to GitHub Packages
+        env:
+          GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME }}
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: |
+          if [ -z "$GH_PACKAGES_USERNAME" ] || [ -z "$GH_PACKAGES_TOKEN" ]; then
+            echo "Missing required secrets: GH_PACKAGES_USERNAME and/or GH_PACKAGES_TOKEN"
+            exit 1
+          fi
+
+          python -m twine upload \
+            --repository-url "https://pypi.pkg.github.com/${OWNER}/" \
+            -u "$GH_PACKAGES_USERNAME" \
+            -p "$GH_PACKAGES_TOKEN" \
+            dist/*

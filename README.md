@@ -30,6 +30,11 @@ python -m pip install --upgrade pip build
 python -m pip install .
 ```
 
+Optional GitHub Packages publish setup (repository secrets):
+
+- `GH_PACKAGES_USERNAME`: your GitHub username
+- `GH_PACKAGES_TOKEN`: GitHub Personal Access Token with `write:packages` and `read:packages` (`repo` also required for private repos)
+
 ### Executing program
 
 - Create a new project folder:
@@ -50,6 +55,10 @@ auto-gen-py-project my_project --init
 python -m auto_gen_py_project my_project
 python -m auto_gen_py_project my_project --init
 ```
+
+- Trigger package publish to GitHub Packages:
+  - Publish a GitHub release (uses `.github/workflows/github-packages.yml`)
+  - Or run the workflow manually with `workflow_dispatch`
 
 Generated project structure:
 
@@ -101,6 +110,7 @@ Contributions are welcome and appreciated.
 
 - 0.1.4
   - Bump project version to latest release number
+  - Add GitHub Packages publishing workflow (`github-packages.yml`)
 - 0.1.3
   - Align package metadata and version across project files
   - Add `auto-gen-py-project` console command entry point
