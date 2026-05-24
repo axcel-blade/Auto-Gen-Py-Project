@@ -7,3 +7,4 @@ auto_gen_py_project.egg-info/
 *.pyc
 .env
 CLAUDE.md
+.claude/

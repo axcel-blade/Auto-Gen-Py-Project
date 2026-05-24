@@ -54,8 +54,8 @@ class TestProjectCreation:
         main_py = Path(project_name, "src", "main.py")
         content = main_py.read_text()
         
-        assert "def hello():" in content, "hello() function not found in main.py"
-        assert "Hello from your new Python project" in content, "Expected content not found"
+        assert "def main():" in content, "main() function not found in main.py"
+        assert "Hello World!" in content, "Expected content not found"
 
     def test_init_py_created(self):
         """Test that __init__.py is created"""
@@ -135,6 +135,7 @@ class TestProjectCreation:
             Path(project_name, "pyproject.toml"),
             Path(project_name, ".gitignore"),
             Path(project_name, "LICENSE"),
+            Path(project_name, "build.py"),
         ]
 
         for file_path in expected_files:
@@ -253,6 +254,7 @@ class TestInitInCurrentFolder:
             Path("pyproject.toml"),
             Path(".gitignore"),
             Path("LICENSE"),
+            Path("build.py"),
         ]
 
         for file_path in expected_files:
