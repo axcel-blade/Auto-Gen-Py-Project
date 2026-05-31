@@ -9,9 +9,7 @@
 
 ## Reporting a Vulnerability
 
-**Please do not report security vulnerabilities through public GitHub issues.**
-
-Send a report to **srikanthfernando3@gmail.com** with:
+Please report security vulnerabilities by opening a [GitHub Issue](https://github.com/axcel-blade/Auto-Gen-Py-Project/issues/new) with the label `security`. Include:
 
 - A description of the vulnerability
 - Steps to reproduce
