@@ -1,19 +1,17 @@
 name: CD
 
-# Continuous Deployment pipeline — two stages:
+# Continuous Deployment pipeline:
 #
-#   staging  : triggered on every push to main
-#              builds the package and deploys to TestPyPI
+#   build+test : triggered on every push to main and on GitHub Release
+#                runs lint, tests, and builds wheel + sdist
 #
-#   production: triggered when a GitHub Release is published
-#               re-uses the same build artifact and deploys to PyPI
+#   production : triggered only when a GitHub Release is published
+#                deploys to PyPI via OIDC Trusted Publisher (no API token needed)
 #
 # Required GitHub settings:
-#   - Environment "testpypi" with a Trusted Publisher at
-#     https://test.pypi.org/manage/account/publishing/
-#   - Environment "pypi" with a Trusted Publisher at
+#   - Environment "pypi" with a Trusted Publisher configured at
 #     https://pypi.org/manage/account/publishing/
-#   - id-token: write is granted per job below (OIDC — no API tokens needed)
+#   - id-token: write permission (granted per job below)
 
 on:
   push:
@@ -35,7 +33,7 @@ env:
 
 jobs:
   # ------------------------------------------------------------------
-  # 1. Run tests before any deployment
+  # 1. Lint and test
   # ------------------------------------------------------------------
   test:
     name: Pre-deploy tests
@@ -93,39 +91,10 @@ jobs:
           retention-days: 7
 
   # ------------------------------------------------------------------
-  # 3. Deploy to TestPyPI — runs on every push to main (staging)
-  # ------------------------------------------------------------------
-  deploy-testpypi:
-    name: Deploy to TestPyPI (staging)
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    permissions:
-      id-token: write
-
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/project/auto-gen-py-project/
-
-    steps:
-      - name: Download distributions
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-${{ github.sha }}
-          path: ${{ env.DIST_DIR }}/
-
-      - name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: ${{ env.DIST_DIR }}/
-          repository-url: https://upload.test.pypi.org/legacy/
-
-  # ------------------------------------------------------------------
-  # 4. Deploy to PyPI — runs only on a published GitHub Release (production)
+  # 3. Deploy to PyPI — only on a published GitHub Release
   # ------------------------------------------------------------------
   deploy-pypi:
-    name: Deploy to PyPI (production)
+    name: Deploy to PyPI
     runs-on: ubuntu-latest
     needs: build
     if: github.event_name == 'release' && github.event.action == 'published'
