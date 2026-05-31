@@ -1,5 +1,4 @@
 import unittest
-from auto_gen_py_project.cli import main
 from auto_gen_py_project import __version__
 
 
