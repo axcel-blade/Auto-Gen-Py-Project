@@ -4,12 +4,12 @@ import venv
 from pathlib import Path
 
 _BUILD_PY_TEMPLATE = '''\
-"""build.py — pybuild task definitions for {project_name}.
+"""pybuild.py — pybuild task definitions for {project_name}.
 
 Run tasks with:
-  pybuild <task>         # e.g. pybuild build
-  pybuild --list         # list all tasks
-  python build.py <task> # without installing pybuild
+  pybuild <task>           # e.g. pybuild build
+  pybuild --list           # list all tasks
+  python pybuild.py <task> # without installing pybuild
 """
 
 import shutil
@@ -46,7 +46,7 @@ def build():
 
 
 # ---------------------------------------------------------------------------
-# Direct execution: python build.py <task>
+# Direct execution: python pybuild.py <task>
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
@@ -145,8 +145,8 @@ requires-python = ">=3.8"
         '    main()\n'
     )
 
-    # build.py — Gradle-like task file
-    (root / "build.py").write_text(_BUILD_PY_TEMPLATE.format(project_name=project_name))
+    # pybuild.py — Gradle-like task file (named pybuild.py to avoid shadowing the `build` package)
+    (root / "pybuild.py").write_text(_BUILD_PY_TEMPLATE.format(project_name=project_name))
 
     # Create project-local virtual environment with pip.
     venv_path = root / ".venv"

@@ -135,7 +135,7 @@ class TestProjectCreation:
             Path(project_name, "pyproject.toml"),
             Path(project_name, ".gitignore"),
             Path(project_name, "LICENSE"),
-            Path(project_name, "build.py"),
+            Path(project_name, "pybuild.py"),
         ]
 
         for file_path in expected_files:
@@ -254,7 +254,7 @@ class TestInitInCurrentFolder:
             Path("pyproject.toml"),
             Path(".gitignore"),
             Path("LICENSE"),
-            Path("build.py"),
+            Path("pybuild.py"),
         ]
 
         for file_path in expected_files:

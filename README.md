@@ -24,7 +24,7 @@ CLI tool that scaffolds a clean Python project — with a built-in Gradle-inspir
 
 ## Overview
 
-`auto-gen-py-project` generates a standards-aligned Python project layout in one command. The scaffold includes `src/`, tests, `run.py`, `pyproject.toml`, `.gitignore`, `LICENSE`, a local `.venv`, and a ready-to-use `build.py` powered by `pybuild`.
+`auto-gen-py-project` generates a standards-aligned Python project layout in one command. The scaffold includes `src/`, tests, `run.py`, `pyproject.toml`, `.gitignore`, `LICENSE`, a local `.venv`, and a ready-to-use `pybuild.py` powered by `pybuild`.
 
 `pybuild` lets you define tasks with dependencies (a DAG) and execute them in the correct order — just like Gradle's `build.gradle`.
 
@@ -79,7 +79,7 @@ my_project/
 │   └── main.py
 ├── tests/
 │   └── test_main.py
-├── build.py          ← pybuild task definitions
+├── pybuild.py        ← pybuild task definitions
 ├── .venv/
 ├── run.py
 ├── README.md
@@ -92,12 +92,12 @@ my_project/
 
 ## pybuild — Task Runner
 
-Every generated project includes a `build.py` with pre-wired tasks. `pybuild` resolves and runs them in dependency order.
+Every generated project includes a `pybuild.py` with pre-wired tasks. `pybuild` resolves and runs them in dependency order.
 
 ### Defining tasks
 
 ```python
-# build.py
+# pybuild.py
 from auto_gen_py_project.build_system import task
 
 # Decorator style
@@ -127,8 +127,8 @@ pybuild test            # runs: clean → test
 pybuild clean test      # explicit sequence
 pybuild --list          # list all tasks and dependencies
 pybuild --quiet build   # suppress per-task output
-pybuild -f path/build.py build  # custom build file
-python build.py build   # without installing pybuild
+pybuild -f path/pybuild.py build  # custom build file
+python pybuild.py build           # without installing pybuild
 ```
 
 ### Example output
@@ -180,10 +180,10 @@ python -m pip --version
 
 | Problem | Fix |
 |---|---|
-| `pybuild: command not found` | Run `pip install -e .` or use `python build.py <task>` |
+| `pybuild: command not found` | Run `pip install -e .` or use `python pybuild.py <task>` |
 | `TaskNotFoundError` | Check spelling; run `pybuild --list` to see available tasks |
-| `CyclicDependencyError` | Review `depends_on` chains in `build.py` for loops |
-| Build file not found | Run from the directory containing `build.py`, or pass `-f path/to/build.py` |
+| `CyclicDependencyError` | Review `depends_on` chains in `pybuild.py` for loops |
+| Build file not found | Run from the directory containing `pybuild.py`, or pass `-f path/to/pybuild.py` |
 
 ---
 

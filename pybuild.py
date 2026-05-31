@@ -1,9 +1,9 @@
-"""build.py — pybuild task definitions for auto-gen-py-project.
+"""pybuild.py — pybuild task definitions for auto-gen-py-project.
 
 Run tasks with:
-  pybuild <task>         # e.g. pybuild build
-  pybuild --list         # list all tasks
-  python build.py <task> # without installing pybuild
+  pybuild <task>           # e.g. pybuild build
+  pybuild --list           # list all tasks
+  python pybuild.py <task> # without installing pybuild
 """
 
 import shutil
@@ -67,7 +67,7 @@ def publish():
 
 
 # ---------------------------------------------------------------------------
-# Direct execution: python build.py <task>
+# Direct execution: python pybuild.py <task>
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
