@@ -47,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 - CLI scaffolding tool (`auto-gen-py-project`)
-- Generates `src/`, tests, `run.py`, `pyproject.toml`, `.gitignore`, `LICENSE`, `.venv`, and `build.py`
+- Generates `src/`, tests, `run.py`, `pyproject.toml`, `.gitignore`, `LICENSE`, `.venv`, and `pybuild.py`
 
 [Unreleased]: https://github.com/axcel-blade/auto-gen-py-project/compare/v0.2.0...HEAD
 [0.2.0]: https://github.com/axcel-blade/auto-gen-py-project/compare/v0.1.4...v0.2.0

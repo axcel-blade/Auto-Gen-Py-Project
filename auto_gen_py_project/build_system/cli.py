@@ -34,15 +34,15 @@ def main() -> None:
 examples:
   pybuild build             run the 'build' task (and its dependencies)
   pybuild clean test        run 'clean', then 'test' in order
-  pybuild --list            list all tasks defined in build.py
-  pybuild -f scripts/build.py test
+  pybuild --list              list all tasks defined in pybuild.py
+  pybuild -f scripts/pybuild.py test
         """,
     )
     parser.add_argument("tasks", nargs="*", help="task(s) to execute")
     parser.add_argument("--list", "-l", action="store_true", help="list available tasks")
     parser.add_argument(
-        "--file", "-f", default="build.py", metavar="FILE",
-        help="build file to load (default: build.py)",
+        "--file", "-f", default="pybuild.py", metavar="FILE",
+        help="build file to load (default: pybuild.py)",
     )
     parser.add_argument("--quiet", "-q", action="store_true", help="suppress build output")
     args = parser.parse_args()
