@@ -6,11 +6,11 @@ name: Release & Publish
 #
 # Workflow:
 #   1. Build source distribution + wheel.
-#   2. Publish to PyPI via OIDC Trusted Publisher (no API token required).
+#   2. Publish to TestPyPI via OIDC Trusted Publisher (no API token required).
 #
 # Required GitHub settings:
-#   - Environment named "pypi" with a Trusted Publisher configured at
-#     https://pypi.org/manage/account/publishing/
+#   - Environment named "testpypi" with a Trusted Publisher configured at
+#     https://test.pypi.org/manage/account/publishing/
 #   - id-token: write permission (granted below per job)
 
 on:
@@ -84,10 +84,10 @@ jobs:
           path: ${{ env.DIST_DIR }}/
 
   # ------------------------------------------------------------------
-  # 3. Publish to PyPI
+  # 3. Publish to TestPyPI
   # ------------------------------------------------------------------
   pypi-publish:
-    name: Publish to PyPI
+    name: Publish to TestPyPI
     runs-on: ubuntu-latest
     needs: release-build
 
@@ -95,8 +95,8 @@ jobs:
       id-token: write
 
     environment:
-      name: pypi
-      url: https://pypi.org/project/auto-gen-py-project/${{ github.event.release.tag_name }}
+      name: testpypi
+      url: https://test.pypi.org/project/auto-gen-py-project/${{ github.event.release.tag_name }}
 
     steps:
       - name: Retrieve release distributions
@@ -105,7 +105,8 @@ jobs:
           name: release-dists
           path: ${{ env.DIST_DIR }}/
 
-      - name: Publish to PyPI
+      - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: ${{ env.DIST_DIR }}/
+          repository-url: https://upload.test.pypi.org/legacy/
