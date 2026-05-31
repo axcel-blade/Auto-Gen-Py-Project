@@ -14,10 +14,9 @@ Use the appropriate issue template:
 
 For general questions, use [GitHub Discussions](https://github.com/axcel-blade/auto-gen-py-project/discussions).
 
-### Direct Contact
+### Security & Sensitive Matters
 
-For security vulnerabilities, see [SECURITY.md](SECURITY.md).  
-For other sensitive matters, email **srikanthfernando3@gmail.com**.
+For security vulnerabilities or sensitive reports, see [SECURITY.md](SECURITY.md) and open a [GitHub Issue](https://github.com/axcel-blade/Auto-Gen-Py-Project/issues/new).
 
 ## Useful Resources
 
