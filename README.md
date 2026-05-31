@@ -2,8 +2,8 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/auto-gen-py-project)](https://pypi.org/project/auto-gen-py-project/)
 [![Python](https://img.shields.io/pypi/pyversions/auto-gen-py-project)](https://pypi.org/project/auto-gen-py-project/)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-[![CI](https://github.com/axcel-blade/auto-gen-py-project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/auto-gen-py-project/actions/workflows/ci.yml)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
+[![CI](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml)
 
 CLI tool that scaffolds a clean Python project — with a built-in Gradle-inspired build system (`pybuild`).
 
