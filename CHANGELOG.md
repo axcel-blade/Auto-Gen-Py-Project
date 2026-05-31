@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-05-31
+
+### Fixed
+- Renamed `build.py` to `pybuild.py` to prevent shadowing Python's `build` package when running `python -m build`
+- Removed unused import of `main` in `tests/test_main.py` (ruff F401)
+
+### Changed
+- Updated LICENSE from GPL v3 to AGPL v3
+- Refactored README — removed dev/ops content, added badges and table of contents
+- Added CD pipeline (`cd.yml`) — staging to TestPyPI on push to `main`, production to PyPI on GitHub Release
+- Removed `release.yml`, superseded by `cd.yml`
+- Added community health files: `CHANGELOG.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `SUPPORT.md`
+- Added GitHub templates: PR template, bug report, feature request issue templates
+
 ## [0.2.0] - 2026-05-31
 
 ### Added
