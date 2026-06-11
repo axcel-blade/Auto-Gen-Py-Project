@@ -611,12 +611,195 @@ pybuild build
 | `@task` | `@task` decorator in `pybuild` |
 | `dependsOn` | `depends_on=[...]` in `@task` |
 | `gradle build` | `pybuild build` |
-| `gradle --tasks` | `pybuild --list` |
+| `gradle --tasks` | `pybuild --list` (grouped by `group=`) |
 | `gradle clean` | `pybuild clean` |
 | `gradle test` | `pybuild test` |
+| `gradle --dry-run` / `-m` | `pybuild --dry-run` / `-m` |
+| `gradle --continue` | `pybuild --continue` |
+| `gradle --parallel` | `pybuild --parallel` / `-p` |
+| `gradle --rerun-tasks` | `pybuild --rerun-tasks` |
+| `gradle --info` | `pybuild --info` / `-i` |
+| `gradle --debug` | `pybuild --debug` / `-d` |
+| `task.enabled = false` | `@task(enabled=False)` or `task.enabled = False` |
+| `task.onlyIf { }` | `@task(only_if=lambda: ...)` |
+| `task.doFirst { }` | `task_obj.do_first(fn)` |
+| `task.doLast { }` | `task_obj.do_last(fn)` |
+| `task.group` | `@task(group="group name")` |
+| `task.finalizedBy` | `@task(finalized_by=["cleanup"])` |
+| `task.mustRunAfter` | `@task(must_run_after=["other"])` |
+| `task.inputs` / `task.outputs` | `@task(inputs=[...], outputs=[...])` → UP-TO-DATE checks |
+| `gradle.properties` | `pybuild.properties` (loaded automatically) |
 | `settings.gradle` | `pyproject.toml` |
 | Gradle Wrapper | `venv` + `pyproject.toml` `requires-python` |
 | Maven Central | PyPI (`pypi.org`) |
 | `./gradlew` | `pybuild` (or `python pybuild.py`) |
 | Groovy DSL | Python |
 | Kotlin DSL | Python + type annotations + `mypy` |
+
+---
+
+## New pybuild Features
+
+### UP-TO-DATE / Incremental Builds
+
+Declare `inputs` and `outputs` on a task. `pybuild` fingerprints them with SHA-256 and skips the task if nothing changed since the last run. Results are stored in `.pybuild-cache.json`.
+
+```python
+@task(inputs=["src/schema.json"], outputs=["dist/schema.py"])
+def generate_schema():
+    """Re-generate only when schema.json changes."""
+    ...
+```
+
+```
+> Task :generate_schema UP-TO-DATE
+```
+
+Use `--rerun-tasks` to force re-execution regardless of cache.
+
+---
+
+### Dry Run
+
+Preview the execution plan without running anything:
+
+```bash
+pybuild --dry-run build
+```
+
+```
+> Task graph (4 tasks — dry run)
+
+  :clean                  [would execute]
+  :lint                   [would execute]
+  :test                   [would execute]
+  :build                  [would execute]
+```
+
+---
+
+### Continue on Failure
+
+Keep executing independent tasks after one fails:
+
+```bash
+pybuild --continue build
+```
+
+---
+
+### Parallel Execution
+
+Run independent tasks in the DAG concurrently using `ThreadPoolExecutor`:
+
+```bash
+pybuild --parallel build
+```
+
+Tasks at the same dependency depth run in parallel. Tasks that depend on a failed task are automatically skipped.
+
+---
+
+### Task Lifecycle Hooks
+
+```python
+from auto_gen_py_project.build_system import list_tasks
+
+t = list_tasks()["test"]
+t.do_first(lambda: print("setup before test"))
+t.do_last(lambda: print("teardown after test"))
+```
+
+---
+
+### Conditional Execution
+
+```python
+import os
+
+@task(only_if=lambda: os.environ.get("CI") == "true")
+def upload_coverage():
+    """Only runs in CI environments."""
+    ...
+```
+
+---
+
+### Finalizers
+
+A finalizer always runs after its triggering task, even if the task failed:
+
+```python
+@task(finalized_by=["cleanup"])
+def integration_test():
+    """Start server, run tests — cleanup always runs after."""
+    ...
+
+@task
+def cleanup():
+    """Stop server and remove temp files."""
+    ...
+```
+
+---
+
+### Task Groups
+
+Group tasks to get organised `--list` output, just like Gradle:
+
+```python
+@task(group="verification")
+def test(): ...
+
+@task(group="build")
+def build(): ...
+```
+
+```bash
+pybuild --list
+```
+
+```
+verification
+------------
+  clean        Remove build artefacts
+  lint         Run ruff linter
+  test         Run the full test suite
+
+build
+-----
+  build        Build source and wheel
+  publish      Upload to PyPI
+```
+
+---
+
+### pybuild.properties
+
+Put build-time configuration in `pybuild.properties` (key=value pairs). The file is loaded automatically before `pybuild.py` and values are available via `build_system.properties`:
+
+```properties
+# pybuild.properties
+publish.repo=pypi
+version.suffix=
+```
+
+```python
+from auto_gen_py_project.build_system import properties
+
+@task
+def publish():
+    repo = properties.get("publish.repo", "testpypi")
+    subprocess.run(["twine", "upload", "--repository", repo, "dist/*"], check=True)
+```
+
+---
+
+### Log Levels
+
+| Flag | Output |
+|---|---|
+| *(default)* | Task names, status, total time |
+| `--info` / `-i` | + declared inputs and outputs |
+| `--debug` / `-d` | + dependency lists |
+| `--quiet` / `-q` | Silent (no output) |

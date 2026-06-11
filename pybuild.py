@@ -2,10 +2,13 @@
 
 Run tasks with:
   pybuild <task>           # e.g. pybuild build
-  pybuild --list           # list all tasks
+  pybuild --list           # list all tasks (grouped)
+  pybuild --dry-run build  # preview without executing
+  pybuild --parallel build # run independent tasks concurrently
   python pybuild.py <task> # without installing pybuild
 """
 
+import os
 import shutil
 import subprocess
 import sys
@@ -15,10 +18,10 @@ from auto_gen_py_project.build_system import task, run_task
 
 
 # ---------------------------------------------------------------------------
-# Task definitions
+# Verification group
 # ---------------------------------------------------------------------------
 
-@task
+@task(group="verification")
 def clean():
     """Remove build artefacts (build/, dist/, __pycache__, .pytest_cache)."""
     for d in ("build", "dist", "__pycache__", ".pytest_cache"):
@@ -27,7 +30,7 @@ def clean():
         p.unlink(missing_ok=True)
 
 
-@task(depends_on=["clean"])
+@task(depends_on=["clean"], group="verification")
 def lint():
     """Run ruff linter (skipped gracefully if ruff is not installed)."""
     result = subprocess.run(
@@ -42,7 +45,7 @@ def lint():
         print("  ruff not installed, skipping lint.")
 
 
-@task(depends_on=["lint"])
+@task(depends_on=["lint"], group="verification")
 def test():
     """Run the full test suite with pytest."""
     subprocess.run(
@@ -51,17 +54,46 @@ def test():
     )
 
 
-@task(depends_on=["test"])
+# ---------------------------------------------------------------------------
+# Build group
+# ---------------------------------------------------------------------------
+
+@task(depends_on=["test"], group="build")
 def build():
     """Build source distribution and wheel into dist/."""
     subprocess.run([sys.executable, "-m", "build"], check=True)
 
 
-@task(depends_on=["build"])
+@task(
+    depends_on=["build"],
+    group="build",
+    only_if=lambda: os.environ.get("PUBLISH_ENABLED", "").lower() == "true",
+)
 def publish():
-    """Upload dist/ packages to PyPI via twine (requires TWINE_* env vars or ~/.pypirc)."""
+    """Upload dist/ packages to PyPI (requires PUBLISH_ENABLED=true and TWINE_* env vars)."""
     subprocess.run(
         [sys.executable, "-m", "twine", "upload", "dist/*"],
+        check=True,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Utility group
+# ---------------------------------------------------------------------------
+
+@task(group="utility")
+def check_env():
+    """Print Python version and key environment info."""
+    print(f"  Python : {sys.version}")
+    print(f"  CWD    : {Path.cwd()}")
+    print(f"  Dist   : {'present' if Path('dist').exists() else 'absent'}")
+
+
+@task(group="utility", enabled=bool(shutil.which("mypy")))
+def typecheck():
+    """Run mypy static type checker (auto-disabled when mypy is not installed)."""
+    subprocess.run(
+        [sys.executable, "-m", "mypy", "auto_gen_py_project/", "--ignore-missing-imports"],
         check=True,
     )
 
