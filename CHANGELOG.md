@@ -72,7 +72,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Python build system (`pybuild`) — a Gradle-inspired task runner
-- `PYTHON_BUILD_FEATURES.md` documenting the full Gradle → pybuild feature mapping
 - Task dependency DAG resolution with cycle detection
 - `@task` decorator and function-call DSL for defining tasks
 - `--list`, `--quiet`, and `-f` CLI flags for `pybuild`

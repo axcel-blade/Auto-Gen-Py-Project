@@ -24,8 +24,7 @@ For security vulnerabilities or sensitive reports, see [SECURITY.md](SECURITY.md
 
 | Resource | Description |
 |---|---|
-| [README.md](README.md) | Installation, usage, and full pybuild CLI reference |
-| [PYTHON_BUILD_FEATURES.md](PYTHON_BUILD_FEATURES.md) | Complete Gradle → pybuild feature mapping |
+| [README.md](README.md) | Installation, usage, full pybuild CLI reference, and Gradle → pybuild feature mapping |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Git Flow workflow, branch model, CI overview, release process |
 | [CHANGELOG.md](CHANGELOG.md) | Full version history |
 
