@@ -8,3 +8,9 @@ auto_gen_py_project.egg-info/
 .env
 CLAUDE.md
 .claude/
+.venv/
+.pybuild-cache.json
+requirements.lock
+htmlcov/
+.coverage
+coverage.xml
