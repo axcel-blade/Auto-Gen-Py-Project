@@ -5,7 +5,7 @@
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
 [![CI](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml)
 
-CLI tool that scaffolds a clean Python project — with a built-in Gradle-inspired build system (`pybuild`).
+CLI tool that scaffolds a production-ready Python project — with a built-in Gradle-inspired build system (`pybuild`).
 
 ---
 
@@ -15,7 +15,13 @@ CLI tool that scaffolds a clean Python project — with a built-in Gradle-inspir
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Generated Project Layout](#generated-project-layout)
 - [pybuild — Task Runner](#pybuild--task-runner)
+  - [Built-in tasks](#built-in-tasks)
+  - [Defining tasks](#defining-tasks)
+  - [Task features](#task-features)
+  - [CLI flags](#cli-flags)
+  - [Example output](#example-output)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
@@ -24,9 +30,9 @@ CLI tool that scaffolds a clean Python project — with a built-in Gradle-inspir
 
 ## Overview
 
-`auto-gen-py-project` generates a standards-aligned Python project layout in one command. The scaffold includes `src/`, tests, `run.py`, `pyproject.toml`, `.gitignore`, `LICENSE`, a local `.venv`, and a ready-to-use `pybuild.py` powered by `pybuild`.
+`auto-gen-py-project` generates a standards-aligned Python project in one command. The scaffold mirrors a Gradle Java project structure and includes everything needed to start developing immediately.
 
-`pybuild` lets you define tasks with dependencies (a DAG) and execute them in the correct order — just like Gradle's `build.gradle`.
+`pybuild` is the built-in task runner. It resolves and executes tasks in dependency order via a DAG — just like Gradle's `build.gradle` — and supports incremental builds, parallel execution, coverage reports, and more.
 
 ---
 
@@ -70,20 +76,28 @@ python -m auto_gen_py_project my_project
 python -m auto_gen_py_project my_project --init
 ```
 
-**Generated project layout:**
+---
+
+## Generated Project Layout
 
 ```text
 my_project/
 ├── src/
 │   ├── __init__.py
-│   └── main.py
+│   ├── main.py
+│   └── resources/          ← static assets, config files, data
 ├── tests/
+│   ├── conftest.py          ← shared fixtures, src/ on sys.path
 │   └── test_main.py
-├── pybuild.py        ← pybuild task definitions
-├── .venv/
-├── run.py
+├── .github/
+│   └── workflows/
+│       └── ci.yml           ← matrix CI + coverage + build verification
+├── pybuild.py               ← task definitions
+├── pybuild                  ← Unix wrapper script (Gradle Wrapper equivalent)
+├── pybuild.bat              ← Windows wrapper script
+├── pyproject.toml           ← project metadata + dev/test/lint dep groups
+├── .venv/                   ← project-local virtual environment
 ├── README.md
-├── pyproject.toml
 ├── LICENSE
 └── .gitignore
 ```
@@ -92,7 +106,24 @@ my_project/
 
 ## pybuild — Task Runner
 
-Every generated project includes a `pybuild.py` with pre-wired tasks. `pybuild` resolves and runs them in dependency order.
+Every generated project includes a `pybuild.py` with pre-wired tasks organised into groups.
+
+### Built-in tasks
+
+| Group | Task | Equivalent Gradle task | What it does |
+|---|---|---|---|
+| verification | `clean` | `clean` | Remove build artefacts |
+| verification | `lint` | `checkstyle` | Run ruff linter |
+| verification | `typecheck` | `pmd` | Run mypy type checker |
+| verification | `test` | `test` | Run pytest, write JUnit XML |
+| verification | `coverage` | `jacocoTestReport` | Run pytest-cov, HTML + XML reports |
+| verification | `check` | `check` | lint + test together |
+| build | `assemble` | `assemble` | Package without running tests |
+| build | `build` | `build` | Full build: test then package |
+| build | `publish` | `publish` | Upload to PyPI via twine |
+| application | `run` | `run` | Execute `src/main.py` |
+| utility | `lock` | lockfile | Freeze env to `requirements.lock` |
+| utility | `check_env` | — | Print Python + env info |
 
 ### Defining tasks
 
@@ -100,35 +131,98 @@ Every generated project includes a `pybuild.py` with pre-wired tasks. `pybuild` 
 # pybuild.py
 from auto_gen_py_project.build_system import task
 
-# Decorator style
-@task
+@task(group="verification")
 def clean():
     shutil.rmtree("dist", ignore_errors=True)
 
-@task(depends_on=["clean"])
+@task(depends_on=["clean"], group="verification")
 def test():
     subprocess.run(["pytest"], check=True)
 
-@task(depends_on=["test"])
+@task(depends_on=["test"], group="build")
 def build():
     subprocess.run(["python", "-m", "build"], check=True)
-
-# Gradle-style function calls
-task("clean", action=clean_fn)
-task("test",  depends_on=["clean"], action=test_fn)
-task("build", depends_on=["test"],  action=build_fn)
 ```
 
-### Running tasks
+### Task features
+
+**Task groups** — `group=` organises tasks in `--list` output, just like Gradle.
+
+**UP-TO-DATE checks** — declare `inputs` and `outputs`; tasks are skipped when nothing changed:
+
+```python
+@task(inputs=["schema.json"], outputs=["generated.py"])
+def generate():
+    ...
+```
+
+**Conditional execution** — `only_if` skips a task at runtime:
+
+```python
+@task(only_if=lambda: os.environ.get("CI") == "true")
+def upload_coverage():
+    ...
+```
+
+**Enable/disable** — `enabled=False` disables a task without removing it:
+
+```python
+@task(enabled=bool(shutil.which("mypy")))
+def typecheck():
+    ...
+```
+
+**Lifecycle hooks** — `do_first` / `do_last` append actions without redefining the task:
+
+```python
+task_obj = list_tasks()["test"]
+task_obj.do_first(lambda: print("setup"))
+task_obj.do_last(lambda: print("teardown"))
+```
+
+**Finalizers** — always run after a task, even on failure:
+
+```python
+@task(finalized_by=["cleanup"])
+def integration_test():
+    ...
+```
+
+**Ordering constraints** — `must_run_after` reorders without adding dependencies:
+
+```python
+@task(must_run_after=["lint"])
+def typecheck():
+    ...
+```
+
+**pybuild.properties** — external key=value config loaded automatically:
+
+```properties
+# pybuild.properties
+publish.repo=pypi
+```
+
+```python
+from auto_gen_py_project.build_system import properties
+repo = properties.get("publish.repo", "testpypi")
+```
+
+### CLI flags
 
 ```bash
-pybuild build           # runs: clean → test → build
-pybuild test            # runs: clean → test
-pybuild clean test      # explicit sequence
-pybuild --list          # list all tasks and dependencies
-pybuild --quiet build   # suppress per-task output
-pybuild -f path/pybuild.py build  # custom build file
-python pybuild.py build           # without installing pybuild
+pybuild build                 # run 'build' and its dependencies
+pybuild clean test            # run 'clean', then 'test'
+pybuild --list                # list all tasks grouped by group
+pybuild --dry-run build       # show what would run without executing
+pybuild --parallel build      # run independent tasks concurrently
+pybuild --continue build      # keep going after a failure
+pybuild --rerun-tasks build   # force re-run ignoring UP-TO-DATE cache
+pybuild --info build          # show task inputs/outputs
+pybuild --debug build         # show full dependency info
+pybuild --quiet build         # suppress all output
+pybuild -f other/pybuild.py build  # custom build file
+python pybuild.py build       # without installing pybuild
 ```
 
 ### Example output
@@ -149,20 +243,23 @@ BUILD SUCCESSFUL in 2.11s
 3 actionable task(s): 3 executed
 ```
 
-### How it works
+With `--list`:
 
-- Tasks form a **directed acyclic graph (DAG)**; execution order is resolved via topological sort.
-- Cycles are detected and reported with the full dependency path.
-- Each task name is unique within a build file; re-registering overwrites the previous definition.
-- Tasks with no action are valid lifecycle placeholders.
+```
+verification
+------------
+  clean        Remove build artefacts
+  lint         Run ruff linter
+  test         Run the full test suite
+  coverage     Run tests with coverage
+  check        lint + test together
 
-### Errors
-
-| Exception | Cause |
-|---|---|
-| `TaskNotFoundError` | Task name does not exist or a dependency is missing |
-| `CyclicDependencyError` | Circular `depends_on` chain detected |
-| `TaskExecutionError` | Task action raised an exception at runtime |
+build
+-----
+  assemble     Package without running tests
+  build        Full build: test then package
+  publish      Upload to PyPI  [disabled]
+```
 
 ---
 
@@ -172,6 +269,9 @@ BUILD SUCCESSFUL in 2.11s
 # Show all CLI options
 python -m auto_gen_py_project --help
 pybuild --help
+
+# List all available tasks
+pybuild --list
 
 # Check Python and pip versions
 python --version
@@ -184,6 +284,8 @@ python -m pip --version
 | `TaskNotFoundError` | Check spelling; run `pybuild --list` to see available tasks |
 | `CyclicDependencyError` | Review `depends_on` chains in `pybuild.py` for loops |
 | Build file not found | Run from the directory containing `pybuild.py`, or pass `-f path/to/pybuild.py` |
+| Task always re-runs | Declare `inputs=` and `outputs=` to enable UP-TO-DATE skipping |
+| Want to force re-run | Pass `--rerun-tasks` to ignore the UP-TO-DATE cache |
 
 ---
 

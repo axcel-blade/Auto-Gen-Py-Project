@@ -46,7 +46,7 @@ git push -u origin feature/my-feature
 ```
 
 CI runs automatically on `feature/*` pushes and on the PR. The PR requires:
-- All CI checks green (`Test`, `Build verification`)
+- All CI checks green (`Test`, `Coverage`, `Build verification`)
 - At least one approving review
 - Branch up-to-date with `develop`
 
@@ -72,7 +72,7 @@ git push -u origin release/0.3.0
 
 On the release branch you may:
 - Fix release-blocking bugs (no new features)
-- Update `README.md` version history
+- Update `CHANGELOG.md` with the release date
 - Tweak packaging metadata
 
 The `version-check` CI job will fail if `__init__.py` and `setup.py` disagree on the version.
@@ -110,8 +110,8 @@ git pull origin main
 git checkout -b hotfix/fix-crash
 
 # ... fix the bug, bump the patch version ...
-# auto_gen_py_project/__init__.py  →  __version__ = "0.2.1"
-# setup.py                         →  version="0.2.1"
+# auto_gen_py_project/__init__.py  →  __version__ = "0.3.1"
+# setup.py                         →  version="0.3.1"
 
 git commit -am "fix: resolve crash on empty project name"
 git push -u origin hotfix/fix-crash
@@ -124,7 +124,7 @@ Once reviewed and merged:
 # Tag the fix on main
 git checkout main
 git pull origin main
-git tag -a v0.2.1 -m "Hotfix 0.2.1"
+git tag -a v0.3.1 -m "Hotfix 0.3.1"
 git push origin main --tags
 
 # Back-merge into develop
@@ -148,7 +148,7 @@ This project uses **semantic versioning** (`MAJOR.MINOR.PATCH`):
 | Change type | Version bump | Example |
 |---|---|---|
 | New feature (backward-compatible) | MINOR | `0.2.0 → 0.3.0` |
-| Bug fix or small improvement | PATCH | `0.2.0 → 0.2.1` |
+| Bug fix or small improvement | PATCH | `0.3.0 → 0.3.1` |
 | Breaking API change | MAJOR | `0.x → 1.0.0` |
 
 Version must be identical in **both** of these files before a release branch is merged:
@@ -166,8 +166,8 @@ The `version-check` CI job enforces this automatically on `release/*`, `hotfix/*
 
 | Workflow | Trigger | Jobs |
 |---|---|---|
-| `ci.yml` | push to `develop`/`feature/*`/`release/*`/`hotfix/*`; PR to `main`/`develop` | Test (3.9/3.11/3.13), Build verification, Version check (release/hotfix only) |
-| `release.yml` | GitHub Release published | Pre-publish test, Build distributions, Publish to PyPI |
+| `ci.yml` | Push to `develop`/`feature/*`/`release/*`/`hotfix/*`; PR to `main`/`develop` | Test matrix (3.9/3.11/3.13) with JUnit XML upload, Coverage report with HTML+XML upload, Build verification, Version check (release/hotfix only) |
+| `cd.yml` | Push to `main`; GitHub Release published | Pre-deploy tests with JUnit XML upload, Build distributions, Deploy to PyPI (release only) |
 
 ---
 
@@ -176,7 +176,7 @@ The `version-check` CI job enforces this automatically on `release/*`, `hotfix/*
 ### `main`
 - Require pull request before merging
 - Require 1 approving review
-- Require status checks: `Test (3.9)`, `Test (3.11)`, `Test (3.13)`, `Build verification`, `Version consistency`
+- Require status checks: `Test (3.9)`, `Test (3.11)`, `Test (3.13)`, `Coverage report`, `Build verification`, `Version consistency`
 - Require branches to be up-to-date before merging
 - Do not allow force-pushes
 - Do not allow deletions
@@ -193,20 +193,31 @@ The `version-check` CI job enforces this automatically on `release/*`, `hotfix/*
 ## Running Checks Locally
 
 ```bash
-# Install in editable mode (includes pybuild entry point)
-pip install -e .
-pip install pytest
+# Install in editable mode with all dev dependencies
+pip install -e ".[dev]"
 
 # Run the build-system test suite (fast — no venv creation)
 python -m pytest tests/test_build_system.py -v
 
-# Run the full suite including slow generator tests
+# Run the full suite including slow generator tests (~13 min — creates real venvs)
 python -m pytest tests/ -v
 
-# Use pybuild to run the project's own task pipeline
+# Lint
+python -m ruff check auto_gen_py_project/ tests/
+
+# Type check
+python -m mypy auto_gen_py_project/ --ignore-missing-imports
+
+# Use pybuild for the full task pipeline
 pybuild --list
-pybuild test
-pybuild build
+pybuild check          # lint + test
+pybuild coverage       # test with HTML + XML coverage report
+pybuild build          # test + package
+pybuild --dry-run build  # preview without executing
+pybuild --parallel build # run independent tasks concurrently
+
+# Generate a lock file
+pybuild lock
 
 # Check version consistency before opening a PR to main
 python -c "
@@ -241,5 +252,5 @@ git push origin --delete vX.Y.Z
 
 ## Questions or Ideas?
 
-Open an issue with the `enhancement` or `question` tag.  
+Open an issue on [GitHub Issues](https://github.com/axcel-blade/auto-gen-py-project/issues).  
 All contributions are welcome and appreciated.
