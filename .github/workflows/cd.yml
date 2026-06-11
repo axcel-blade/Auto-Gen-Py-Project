@@ -52,13 +52,24 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e .
-          pip install pytest ruff
+          pip install pytest pytest-cov ruff
 
       - name: Lint
         run: python -m ruff check auto_gen_py_project/ tests/
 
       - name: Run tests
-        run: python -m pytest tests/test_build_system.py -v --tb=short
+        run: |
+          mkdir -p build/test-results
+          python -m pytest tests/test_build_system.py -v --tb=short \
+            --junit-xml=build/test-results/test.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-cd
+          path: build/test-results/
+          retention-days: 7
 
   # ------------------------------------------------------------------
   # 2. Build distributions (wheel + sdist)

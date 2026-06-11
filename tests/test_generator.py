@@ -9,341 +9,383 @@ class TestProjectCreation:
     """Test suite for project creation functionality"""
 
     def setup_method(self):
-        """Setup test environment before each test"""
         self.test_dir = tempfile.mkdtemp()
         self.original_cwd = os.getcwd()
         os.chdir(self.test_dir)
 
     def teardown_method(self):
-        """Cleanup after each test"""
         os.chdir(self.original_cwd)
         shutil.rmtree(self.test_dir)
 
     def test_project_creation_new_folder(self):
-        """Test creating project in a new folder (traditional mode)"""
         project_name = "test_project"
         create_project(project_name)
-
-        # Check if project folder exists
-        assert Path(project_name).exists(), f"Project folder '{project_name}' was not created"
-        assert Path(project_name).is_dir(), f"'{project_name}' is not a directory"
+        assert Path(project_name).exists()
+        assert Path(project_name).is_dir()
 
     def test_src_directory_created(self):
-        """Test that src directory is created"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        src_path = Path(project_name, "src")
-        assert src_path.exists(), "src directory was not created"
-        assert src_path.is_dir(), "src is not a directory"
+        create_project("test_project")
+        assert Path("test_project", "src").is_dir()
 
     def test_main_py_file_created(self):
-        """Test that main.py is created in src directory"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        main_py = Path(project_name, "src", "main.py")
-        assert main_py.exists(), "main.py was not created"
-        assert main_py.is_file(), "main.py is not a file"
+        create_project("test_project")
+        assert Path("test_project", "src", "main.py").is_file()
 
     def test_main_py_content(self):
-        """Test that main.py has correct content"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        main_py = Path(project_name, "src", "main.py")
-        content = main_py.read_text()
-        
-        assert "def main():" in content, "main() function not found in main.py"
-        assert "Hello World!" in content, "Expected content not found"
+        create_project("test_project")
+        content = Path("test_project", "src", "main.py").read_text()
+        assert "def main" in content
+        assert "Hello World!" in content
 
     def test_init_py_created(self):
-        """Test that __init__.py is created"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        init_py = Path(project_name, "src", "__init__.py")
-        assert init_py.exists(), "__init__.py was not created"
+        create_project("test_project")
+        assert Path("test_project", "src", "__init__.py").exists()
 
     def test_tests_directory_created(self):
-        """Test that tests directory is created"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        tests_path = Path(project_name, "tests")
-        assert tests_path.exists(), "tests directory was not created"
-        assert tests_path.is_dir(), "tests is not a directory"
+        create_project("test_project")
+        assert Path("test_project", "tests").is_dir()
 
     def test_test_file_created(self):
-        """Test that test_main.py is created in tests directory"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        test_main = Path(project_name, "tests", "test_main.py")
-        assert test_main.exists(), "test_main.py was not created"
-        assert test_main.is_file(), "test_main.py is not a file"
+        create_project("test_project")
+        assert Path("test_project", "tests", "test_main.py").is_file()
 
     def test_readme_created(self):
-        """Test that README.md is created"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        readme = Path(project_name, "README.md")
-        assert readme.exists(), "README.md was not created"
-        assert "test_project" in readme.read_text(), "Project name not in README"
+        create_project("test_project")
+        readme = Path("test_project", "README.md")
+        assert readme.exists()
+        assert "test_project" in readme.read_text()
 
     def test_pyproject_toml_created(self):
-        """Test that pyproject.toml is created"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        pyproject = Path(project_name, "pyproject.toml")
-        assert pyproject.exists(), "pyproject.toml was not created"
-        content = pyproject.read_text()
-        assert "test_project" in content, "Project name not in pyproject.toml"
+        create_project("test_project")
+        pyproject = Path("test_project", "pyproject.toml")
+        assert pyproject.exists()
+        assert "test_project" in pyproject.read_text()
 
     def test_gitignore_created(self):
-        """Test that .gitignore is created"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        gitignore = Path(project_name, ".gitignore")
-        assert gitignore.exists(), ".gitignore was not created"
+        create_project("test_project")
+        gitignore = Path("test_project", ".gitignore")
+        assert gitignore.exists()
         content = gitignore.read_text()
-        assert "__pycache__/" in content, "__pycache__/ not in .gitignore"
-        assert "*.pyc" in content, "*.pyc not in .gitignore"
+        assert "__pycache__/" in content
+        assert "*.pyc" in content
 
     def test_license_created(self):
-        """Test that LICENSE file is created"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        license_file = Path(project_name, "LICENSE")
-        assert license_file.exists(), "LICENSE was not created"
-        assert "MIT License" in license_file.read_text(), "MIT License text not found"
+        create_project("test_project")
+        license_file = Path("test_project", "LICENSE")
+        assert license_file.exists()
+        assert "MIT License" in license_file.read_text()
 
     def test_project_structure_complete(self):
-        """Test that all expected files are created"""
-        project_name = "test_project"
-        create_project(project_name)
-
-        expected_files = [
-            Path(project_name, "src", "__init__.py"),
-            Path(project_name, "src", "main.py"),
-            Path(project_name, "tests", "test_main.py"),
-            Path(project_name, "README.md"),
-            Path(project_name, "pyproject.toml"),
-            Path(project_name, ".gitignore"),
-            Path(project_name, "LICENSE"),
-            Path(project_name, "pybuild.py"),
+        create_project("test_project")
+        expected = [
+            Path("test_project", "src", "__init__.py"),
+            Path("test_project", "src", "main.py"),
+            Path("test_project", "src", "resources", ".gitkeep"),
+            Path("test_project", "tests", "test_main.py"),
+            Path("test_project", "tests", "conftest.py"),
+            Path("test_project", "README.md"),
+            Path("test_project", "pyproject.toml"),
+            Path("test_project", ".gitignore"),
+            Path("test_project", "LICENSE"),
+            Path("test_project", "pybuild.py"),
+            Path("test_project", "pybuild.bat"),
+            Path("test_project", ".github", "workflows", "ci.yml"),
         ]
-
-        for file_path in expected_files:
-            assert file_path.exists(), f"Expected file {file_path} was not created"
+        for f in expected:
+            assert f.exists(), f"Expected {f} was not created"
 
     def test_venv_created_in_new_folder(self):
-        """Test that a .venv is created in the generated project folder"""
-        project_name = "test_project"
-        create_project(project_name)
+        create_project("test_project")
+        assert Path("test_project", ".venv").is_dir()
 
-        venv_path = Path(project_name, ".venv")
-        assert venv_path.exists(), ".venv directory was not created"
-        assert venv_path.is_dir(), ".venv is not a directory"
+
+class TestGeneratedFeatures:
+    """Tests for the new Gradle-equivalent features in generated projects."""
+
+    def setup_method(self):
+        self.test_dir = tempfile.mkdtemp()
+        self.original_cwd = os.getcwd()
+        os.chdir(self.test_dir)
+
+    def teardown_method(self):
+        os.chdir(self.original_cwd)
+        shutil.rmtree(self.test_dir)
+
+    # Resources directory (src/main/resources equivalent)
+    def test_resources_directory_created(self):
+        create_project("test_project")
+        assert Path("test_project", "src", "resources").is_dir()
+
+    def test_resources_gitkeep_created(self):
+        create_project("test_project")
+        assert Path("test_project", "src", "resources", ".gitkeep").exists()
+
+    # Gradle Wrapper equivalent
+    def test_unix_wrapper_created(self):
+        create_project("test_project")
+        wrapper = Path("test_project", "pybuild")
+        assert wrapper.exists()
+        content = wrapper.read_text()
+        assert ".venv" in content
+        assert "auto_gen_py_project.build_system.cli" in content
+
+    def test_windows_wrapper_created(self):
+        create_project("test_project")
+        wrapper = Path("test_project", "pybuild.bat")
+        assert wrapper.exists()
+        content = wrapper.read_text()
+        assert ".venv" in content
+        assert "auto_gen_py_project.build_system.cli" in content
+
+    # pyproject.toml with dev dependencies
+    def test_pyproject_has_dev_dependencies(self):
+        create_project("test_project")
+        content = Path("test_project", "pyproject.toml").read_text()
+        assert "[project.optional-dependencies]" in content
+        assert "dev" in content
+        assert "pytest" in content
+        assert "pytest-cov" in content
+        assert "ruff" in content
+
+    def test_pyproject_has_test_dependencies(self):
+        create_project("test_project")
+        content = Path("test_project", "pyproject.toml").read_text()
+        assert "test" in content
+        assert "pytest-xdist" in content
+
+    def test_pyproject_has_lint_dependencies(self):
+        create_project("test_project")
+        content = Path("test_project", "pyproject.toml").read_text()
+        assert "lint" in content
+        assert "mypy" in content
+
+    def test_pyproject_has_pytest_config(self):
+        create_project("test_project")
+        content = Path("test_project", "pyproject.toml").read_text()
+        assert "[tool.pytest.ini_options]" in content
+        assert "testpaths" in content
+
+    def test_pyproject_has_coverage_config(self):
+        create_project("test_project")
+        content = Path("test_project", "pyproject.toml").read_text()
+        assert "[tool.coverage.run]" in content
+
+    # conftest.py
+    def test_conftest_created(self):
+        create_project("test_project")
+        assert Path("test_project", "tests", "conftest.py").exists()
+
+    def test_conftest_adds_src_to_path(self):
+        create_project("test_project")
+        content = Path("test_project", "tests", "conftest.py").read_text()
+        assert "sys.path" in content
+        assert "src" in content
+
+    # Generated CI workflow
+    def test_ci_yml_created(self):
+        create_project("test_project")
+        assert Path("test_project", ".github", "workflows", "ci.yml").exists()
+
+    def test_ci_yml_has_matrix_builds(self):
+        create_project("test_project")
+        content = Path("test_project", ".github", "workflows", "ci.yml").read_text()
+        assert "matrix" in content
+        assert "python-version" in content
+
+    def test_ci_yml_has_junit_xml(self):
+        create_project("test_project")
+        content = Path("test_project", ".github", "workflows", "ci.yml").read_text()
+        assert "junit-xml" in content
+
+    def test_ci_yml_has_coverage(self):
+        create_project("test_project")
+        content = Path("test_project", ".github", "workflows", "ci.yml").read_text()
+        assert "coverage" in content
+        assert "cov-report" in content
+
+    def test_ci_yml_uploads_test_results(self):
+        create_project("test_project")
+        content = Path("test_project", ".github", "workflows", "ci.yml").read_text()
+        assert "upload-artifact" in content
+        assert "test-results" in content
+
+    # Generated pybuild.py tasks
+    def test_pybuild_has_check_task(self):
+        create_project("test_project")
+        content = Path("test_project", "pybuild.py").read_text()
+        assert "def check():" in content
+
+    def test_pybuild_has_assemble_task(self):
+        create_project("test_project")
+        content = Path("test_project", "pybuild.py").read_text()
+        assert "def assemble():" in content
+
+    def test_pybuild_has_run_task(self):
+        create_project("test_project")
+        content = Path("test_project", "pybuild.py").read_text()
+        assert "def run():" in content
+
+    def test_pybuild_has_coverage_task(self):
+        create_project("test_project")
+        content = Path("test_project", "pybuild.py").read_text()
+        assert "def coverage():" in content
+
+    def test_pybuild_has_lock_task(self):
+        create_project("test_project")
+        content = Path("test_project", "pybuild.py").read_text()
+        assert "def lock():" in content
+
+    def test_pybuild_has_task_groups(self):
+        create_project("test_project")
+        content = Path("test_project", "pybuild.py").read_text()
+        assert 'group="verification"' in content
+        assert 'group="build"' in content
+        assert 'group="application"' in content
+        assert 'group="utility"' in content
+
+    def test_pybuild_test_task_writes_junit_xml(self):
+        create_project("test_project")
+        content = Path("test_project", "pybuild.py").read_text()
+        assert "junit-xml" in content
+
+    def test_pybuild_coverage_task_writes_html_and_xml(self):
+        create_project("test_project")
+        content = Path("test_project", "pybuild.py").read_text()
+        assert "cov-report" in content
+        assert "html" in content
+        assert "xml" in content
+
+    def test_gitignore_covers_new_artefacts(self):
+        create_project("test_project")
+        content = Path("test_project", ".gitignore").read_text()
+        assert "htmlcov/" in content
+        assert "requirements.lock" in content
+        assert ".coverage" in content
 
 
 class TestInitInCurrentFolder:
     """Test suite for init in current folder functionality (-i flag)"""
 
     def setup_method(self):
-        """Setup test environment before each test"""
         self.test_dir = tempfile.mkdtemp()
         self.original_cwd = os.getcwd()
         os.chdir(self.test_dir)
 
     def teardown_method(self):
-        """Cleanup after each test"""
         os.chdir(self.original_cwd)
         shutil.rmtree(self.test_dir)
 
     def test_init_in_current_folder(self):
-        """Test creating project in current folder with -i flag"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
-        # Check that project files exist in current directory, not in subdirectory
-        assert Path("src").exists(), "src directory was not created in current folder"
-        assert Path("tests").exists(), "tests directory was not created in current folder"
-        assert Path("README.md").exists(), "README.md was not created in current folder"
-
-        # Ensure project folder was NOT created
-        assert not Path(project_name).exists() or not Path(project_name).is_dir(), \
-            f"'{project_name}' subdirectory should not be created with -i flag"
+        create_project("my_project", init_in_current_folder=True)
+        assert Path("src").exists()
+        assert Path("tests").exists()
+        assert Path("README.md").exists()
+        assert not Path("my_project").is_dir()
 
     def test_init_src_directory_in_current_folder(self):
-        """Test src directory is created in current folder"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
-        src_path = Path("src")
-        assert src_path.exists(), "src directory was not created in current folder"
-        assert src_path.is_dir(), "src is not a directory"
+        create_project("my_project", init_in_current_folder=True)
+        assert Path("src").is_dir()
 
     def test_init_main_py_in_current_folder(self):
-        """Test main.py is created in current folder's src"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
-        main_py = Path("src", "main.py")
-        assert main_py.exists(), "main.py was not created in current folder"
+        create_project("my_project", init_in_current_folder=True)
+        assert Path("src", "main.py").exists()
 
     def test_init_tests_in_current_folder(self):
-        """Test tests directory is created in current folder"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
-        tests_path = Path("tests")
-        assert tests_path.exists(), "tests directory was not created in current folder"
-        assert tests_path.is_dir(), "tests is not a directory"
+        create_project("my_project", init_in_current_folder=True)
+        assert Path("tests").is_dir()
 
     def test_init_readme_in_current_folder(self):
-        """Test README.md is created in current folder"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
+        create_project("my_project", init_in_current_folder=True)
         readme = Path("README.md")
-        assert readme.exists(), "README.md was not created in current folder"
-        content = readme.read_text()
-        assert "my_project" in content, "Project name not in README"
+        assert readme.exists()
+        assert "my_project" in readme.read_text()
 
     def test_init_pyproject_in_current_folder(self):
-        """Test pyproject.toml is created in current folder"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
+        create_project("my_project", init_in_current_folder=True)
         pyproject = Path("pyproject.toml")
-        assert pyproject.exists(), "pyproject.toml was not created in current folder"
-        content = pyproject.read_text()
-        assert "my_project" in content, "Project name not in pyproject.toml"
+        assert pyproject.exists()
+        assert "my_project" in pyproject.read_text()
 
     def test_init_gitignore_in_current_folder(self):
-        """Test .gitignore is created in current folder"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
-        gitignore = Path(".gitignore")
-        assert gitignore.exists(), ".gitignore was not created in current folder"
+        create_project("my_project", init_in_current_folder=True)
+        assert Path(".gitignore").exists()
 
     def test_init_license_in_current_folder(self):
-        """Test LICENSE is created in current folder"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
-        license_file = Path("LICENSE")
-        assert license_file.exists(), "LICENSE was not created in current folder"
+        create_project("my_project", init_in_current_folder=True)
+        assert Path("LICENSE").exists()
 
     def test_init_complete_structure(self):
-        """Test that all expected files are created in current folder"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
-        expected_files = [
+        create_project("my_project", init_in_current_folder=True)
+        expected = [
             Path("src", "__init__.py"),
             Path("src", "main.py"),
+            Path("src", "resources", ".gitkeep"),
             Path("tests", "test_main.py"),
+            Path("tests", "conftest.py"),
             Path("README.md"),
             Path("pyproject.toml"),
             Path(".gitignore"),
             Path("LICENSE"),
             Path("pybuild.py"),
+            Path("pybuild.bat"),
+            Path(".github", "workflows", "ci.yml"),
         ]
-
-        for file_path in expected_files:
-            assert file_path.exists(), f"Expected file {file_path} was not created in current folder"
+        for f in expected:
+            assert f.exists(), f"Expected {f} was not created in current folder"
 
     def test_init_creates_venv_in_current_folder(self):
-        """Test that .venv is created in current folder for -i mode"""
-        project_name = "my_project"
-        create_project(project_name, init_in_current_folder=True)
-
-        venv_path = Path(".venv")
-        assert venv_path.exists(), ".venv directory was not created in current folder"
-        assert venv_path.is_dir(), ".venv in current folder is not a directory"
+        create_project("my_project", init_in_current_folder=True)
+        assert Path(".venv").is_dir()
 
 
 class TestProjectNames:
     """Test suite for different project name variations"""
 
     def setup_method(self):
-        """Setup test environment before each test"""
         self.test_dir = tempfile.mkdtemp()
         self.original_cwd = os.getcwd()
         os.chdir(self.test_dir)
 
     def teardown_method(self):
-        """Cleanup after each test"""
         os.chdir(self.original_cwd)
         shutil.rmtree(self.test_dir)
 
     def test_project_with_hyphens(self):
-        """Test project name with hyphens"""
-        project_name = "my-awesome-project"
-        create_project(project_name)
-
-        assert Path(project_name).exists(), f"Project folder '{project_name}' was not created"
-        assert Path(project_name, "README.md").exists()
+        create_project("my-awesome-project")
+        assert Path("my-awesome-project").exists()
+        assert Path("my-awesome-project", "README.md").exists()
 
     def test_project_with_underscores(self):
-        """Test project name with underscores"""
-        project_name = "my_awesome_project"
-        create_project(project_name)
-
-        assert Path(project_name).exists(), f"Project folder '{project_name}' was not created"
+        create_project("my_awesome_project")
+        assert Path("my_awesome_project").exists()
 
     def test_project_with_numbers(self):
-        """Test project name with numbers"""
-        project_name = "project123"
-        create_project(project_name)
-
-        assert Path(project_name).exists(), f"Project folder '{project_name}' was not created"
+        create_project("project123")
+        assert Path("project123").exists()
 
 
 class TestEdgeCases:
     """Test suite for edge cases"""
 
     def setup_method(self):
-        """Setup test environment before each test"""
         self.test_dir = tempfile.mkdtemp()
         self.original_cwd = os.getcwd()
         os.chdir(self.test_dir)
 
     def teardown_method(self):
-        """Cleanup after each test"""
         os.chdir(self.original_cwd)
         shutil.rmtree(self.test_dir)
 
     def test_existing_project_folder(self):
-        """Test creating project when folder already exists"""
-        project_name = "existing_project"
-        # Create folder first
-        Path(project_name).mkdir()
-
-        # Should not raise error, should create files inside
-        create_project(project_name)
-        assert Path(project_name, "src").exists()
-        assert Path(project_name, "README.md").exists()
+        Path("existing_project").mkdir()
+        create_project("existing_project")
+        assert Path("existing_project", "src").exists()
+        assert Path("existing_project", "README.md").exists()
 
     def test_idempotent_init_in_current_folder(self):
-        """Test that init can be run multiple times (overwrites files)"""
-        project_name = "my_project"
-        
-        # First run
-        create_project(project_name, init_in_current_folder=True)
+        create_project("my_project", init_in_current_folder=True)
         first_readme = Path("README.md").read_text()
-
-        # Second run should overwrite
-        create_project(project_name, init_in_current_folder=True)
+        create_project("my_project", init_in_current_folder=True)
         second_readme = Path("README.md").read_text()
-
-        # Both should have the same content
         assert first_readme == second_readme
         assert Path("src", "main.py").exists()
