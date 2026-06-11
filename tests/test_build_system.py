@@ -13,11 +13,7 @@ from auto_gen_py_project.build_system.exceptions import (
     TaskExecutionError,
     TaskNotFoundError,
 )
-from auto_gen_py_project.build_system.runner import (
-    LOG_NORMAL,
-    LOG_QUIET,
-    _fingerprint,
-)
+from auto_gen_py_project.build_system.runner import _fingerprint
 
 
 # ---------------------------------------------------------------------------
