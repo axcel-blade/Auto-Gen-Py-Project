@@ -4,7 +4,7 @@ Future plans for **auto-gen-py-project**.
 
 ## v1.2.x (current)
 
-- MIT-licensed package distribution
+- MIT-licensed package distribution via **LICENSE.md**
 - Stable CLI (`create`, `new`, `init`, plugins, doctor)
 - Built-in scaffolds for common Python project types
 - Config file defaults (TOML / YAML / JSON)

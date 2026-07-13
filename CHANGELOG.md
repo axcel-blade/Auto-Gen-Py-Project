@@ -2,6 +2,14 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.1
+
+### Changed
+
+- Keep **LICENSE.md** as the sole license file (removed root `LICENSE`)
+- Point README badge and license links at `LICENSE.md`
+- Documentation version bump to 1.2.1
+
 ## 1.2.0
 
 ### Changed

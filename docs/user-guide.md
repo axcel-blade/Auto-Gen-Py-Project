@@ -1,6 +1,6 @@
 # User guide
 
-**auto-gen-py-project** v1.2.0 generates production-ready Python projects from templates.
+**auto-gen-py-project** v1.2.1 generates production-ready Python projects from templates.
 
 ## Install
 

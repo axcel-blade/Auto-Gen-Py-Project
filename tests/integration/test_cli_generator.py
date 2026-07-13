@@ -40,7 +40,7 @@ def test_generator_creates_project(tmp_path: Path):
 def test_cli_version():
     result = runner.invoke(app, ["version"])
     assert result.exit_code == 0
-    assert "1.2.0" in _out(result)
+    assert "1.2.1" in _out(result)
 
 
 def test_cli_list_templates():

@@ -1,7 +1,8 @@
 """Domain models for project generation.
 
-``LicenseType`` values are options offered to *generated* projects; the
-generator package itself is MIT-licensed (see ``LICENSE``).
+``LicenseType`` values are options offered to *generated* projects.
+The generator package itself is MIT-licensed; see root ``LICENSE.md`` only
+(no separate ``LICENSE`` file is kept in this repository).
 """
 
 from __future__ import annotations

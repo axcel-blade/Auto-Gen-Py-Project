@@ -2,9 +2,9 @@
 
 **auto-gen-py-project** is released under the **MIT License**.
 
-Copyright (c) 2026 Axcel Blade
+This repository keeps license terms in **LICENSE.md** only.
 
-The full license text is also in [`LICENSE`](LICENSE) (used for GitHub license detection).
+Copyright (c) 2026 Axcel Blade
 
 ```text
 MIT License
@@ -38,4 +38,4 @@ SPDX-License-Identifier: MIT
 
 ## Version
 
-This documentation applies to package version **1.2.0**.
+Package version **1.2.1**.
