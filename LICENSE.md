@@ -1,21 +1,41 @@
 # License
 
-**auto-gen-py-project** is licensed under the **GNU Affero General Public License v3.0 or later** (AGPL-3.0-or-later).
+**auto-gen-py-project** is released under the **MIT License**.
 
-The full license text is in [`LICENSE`](LICENSE).
+Copyright (c) 2026 Axcel Blade
 
-## Summary
+The full license text is also in [`LICENSE`](LICENSE) (used for GitHub license detection).
 
-- You may use, study, share, and modify this software under AGPL-3.0 terms.
-- If you distribute a modified version, or run a modified version as a network service, you must provide corresponding source under the AGPL.
-- This summary is not a substitute for the full license.
+```text
+MIT License
+
+Copyright (c) 2026 Axcel Blade
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
 ## SPDX
 
 ```text
-SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: MIT
 ```
 
 ## Version
 
-This documentation applies to package version **1.1.0**.
+This documentation applies to package version **1.2.0**.

@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for contributing to **auto-gen-py-project** (v1.1.0).
+Thanks for contributing to **auto-gen-py-project** (v1.2.0).
 
 ## Git Flow
 
@@ -23,7 +23,7 @@ pytest
 
 ## Guidelines
 
-- Python 3.12+, type hints, docstrings/comments on public APIs
+- Python 3.12+, type hints, comments/docstrings on public APIs
 - Keep generators, plugins, and CLI modular (SOLID / Clean Architecture)
 - Add unit tests for new templates and integration tests for CLI flows
 - Update `CHANGELOG.md`, `README.md`, and version strings (`pyproject.toml`, `auto_gen_py_project/__init__.py`) when releasing
@@ -37,3 +37,7 @@ pytest
 4. Link related issues
 
 See [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md).
+
+## License
+
+Contributions are accepted under the project **MIT** license. See [LICENSE.md](LICENSE.md).

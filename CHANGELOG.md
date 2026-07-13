@@ -2,6 +2,14 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.0
+
+### Changed
+
+- Relicensed the package from AGPL-3.0-or-later to **MIT**
+- Updated community docs, badges, and SPDX metadata for MIT
+- Version bump across package metadata and documentation
+
 ## 1.1.0
 
 ### Added
@@ -24,4 +32,4 @@ All notable changes to **auto-gen-py-project** are documented here.
 
 ## 1.0.0
 
-- Initial generator-oriented release baseline (superseded by 1.1.0 documentation and layout)
+- Initial generator-oriented release baseline (superseded by later releases)

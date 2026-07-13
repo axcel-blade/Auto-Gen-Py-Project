@@ -2,20 +2,21 @@
 
 Future plans for **auto-gen-py-project**.
 
-## v1.1.x (current)
+## v1.2.x (current)
 
+- MIT-licensed package distribution
 - Stable CLI (`create`, `new`, `init`, plugins, doctor)
 - Built-in scaffolds for common Python project types
 - Config file defaults (TOML / YAML / JSON)
 - Extensible AI provider interface (heuristic default)
 
-## v1.2
+## v1.3
 
 - Richer custom-template marketplace / install-from-git
 - Optional interactive prompts declared in `template.json`
 - Better package-manager-specific project files (Poetry/Hatch/PDM layouts)
 
-## v1.3
+## v1.4
 
 - First-class AI-assisted generation plugins (opt-in)
 - Template recommendation from natural-language descriptions with pluggable backends

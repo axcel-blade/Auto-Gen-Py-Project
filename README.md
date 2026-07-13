@@ -3,9 +3,9 @@
 AI-ready Python project generator — scaffolds production-ready repos from templates, with plugins, an interactive wizard, and optional tooling (Docker, GitHub Actions, pre-commit, venv).
 
 [![CI](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
+[![PyPI version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Install
 
@@ -42,7 +42,7 @@ Also available as: `python -m auto_gen_py_project …`
 | `install-template` | Install a template plugin (or local sample) |
 | `doctor` | Environment diagnostics |
 | `update` | Upgrade from PyPI |
-| `version` | Show version (`1.1.0`) |
+| `version` | Show version (`1.2.0`) |
 | `config` | Show / write user defaults |
 | `plugin list\|install\|remove` | Plugin management |
 
@@ -117,4 +117,4 @@ Git Flow branches: `main`, `develop`, `feature/*`, `release/*`, `hotfix/*`.
 
 ## License
 
-AGPL-3.0-or-later — see [LICENSE](LICENSE) and [LICENSE.md](LICENSE.md).
+MIT — see [LICENSE](LICENSE) and [LICENSE.md](LICENSE.md).

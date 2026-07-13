@@ -1,10 +1,10 @@
 # TODO
 
-Task tracking for **auto-gen-py-project** v1.1.0+.
+Task tracking for **auto-gen-py-project** v1.2.0+.
 
 ## Near term
 
-- [ ] Publish v1.1.0 to PyPI
+- [ ] Publish v1.2.0 to PyPI (MIT license)
 - [ ] Add end-to-end snapshot tests for each built-in project type
 - [ ] Document custom template authoring with more examples
 - [ ] Add `uv`/`poetry` lockfile generation options for scaffolds

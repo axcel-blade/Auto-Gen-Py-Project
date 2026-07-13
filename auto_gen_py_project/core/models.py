@@ -1,4 +1,8 @@
-"""Domain models for project generation."""
+"""Domain models for project generation.
+
+``LicenseType`` values are options offered to *generated* projects; the
+generator package itself is MIT-licensed (see ``LICENSE``).
+"""
 
 from __future__ import annotations
 
