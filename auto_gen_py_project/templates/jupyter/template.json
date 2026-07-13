@@ -1,0 +1,9 @@
+﻿{
+  "id": "jupyter",
+  "name": "jupyter",
+  "description": "Built-in jupyter project template",
+  "project_types": ["jupyter"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "jupyter"]
+}

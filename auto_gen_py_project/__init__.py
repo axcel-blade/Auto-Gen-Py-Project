@@ -1,4 +1,10 @@
-# auto_gen_py_project/__init__.py
+"""auto-gen-py-project — generate production-ready Python projects.
 
-__version__ = "0.2.1"
-__author__ = "Axcel Blade"
+Public package version is defined here and must stay in sync with
+``pyproject.toml`` and the changelog.
+"""
+
+from __future__ import annotations
+
+__version__ = "1.1.0"
+__all__ = ["__version__"]

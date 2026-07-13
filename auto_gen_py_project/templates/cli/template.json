@@ -1,0 +1,9 @@
+﻿{
+  "id": "cli",
+  "name": "cli",
+  "description": "Built-in cli project template",
+  "project_types": ["cli"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "cli"]
+}

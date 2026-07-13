@@ -1,0 +1,9 @@
+﻿{
+  "id": "async",
+  "name": "async",
+  "description": "Built-in async project template",
+  "project_types": ["async"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "async"]
+}

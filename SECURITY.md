@@ -1,19 +1,28 @@
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.2.x   | :white_check_mark: |
-| < 0.2.0 | :x:                |
+| Version | Supported |
+|---------|-----------|
+| 1.1.x   | Yes |
+| 1.0.x   | Best effort |
+| < 1.0   | No |
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-Please report security vulnerabilities by opening a [GitHub Issue](https://github.com/axcel-blade/Auto-Gen-Py-Project/issues/new) with the label `security`. Include:
+Please use [GitHub Security Advisories](https://github.com/axcel-blade/Auto-Gen-Py-Project/security/advisories/new) for undisclosed vulnerabilities.
 
-- A description of the vulnerability
-- Steps to reproduce
-- Potential impact
-- Any suggested fixes (optional)
+Do **not** open a public issue for security-sensitive reports until a fix is available or maintainers approve disclosure.
 
-You will receive a response within **48 hours**. If the issue is confirmed, a patch will be released as soon as possible depending on severity.
+Include:
+
+- Affected version (for example `1.1.0`)
+- Reproduction steps
+- Impact assessment
+
+## Hardening notes
+
+- Template rendering uses Jinja2 with `StrictUndefined`
+- Plugins loaded from entry points run with the same privileges as the invoking user
+- Review third-party template and plugin packages before installing them
+- Prefer pinning dependency versions in generated projects for production use

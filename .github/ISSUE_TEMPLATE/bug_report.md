@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a bug or unexpected behavior
+about: Report a bug or unexpected behavior in auto-gen-py-project
 title: '[BUG] '
 labels: bug
 assignees: ''
@@ -12,9 +12,9 @@ assignees: ''
 
 ## Steps to Reproduce
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Expected Behavior
 
@@ -27,9 +27,14 @@ assignees: ''
 ## Environment
 
 - OS: <!-- e.g. Windows 11, Ubuntu 22.04 -->
-- Python version: <!-- e.g. 3.11.2 -->
-- Package version: <!-- e.g. 0.2.0 -->
+- Python version: <!-- e.g. 3.12.2 -->
+- auto-gen-py-project version: <!-- output of `auto-gen-py-project version` -->
+- `auto-gen-py-project doctor` output:
+
+```text
+paste here
+```
 
 ## Additional Context
 
-<!-- Any other context about the problem. -->
+<!-- Templates used, flags (`--docker`, `--ai`, …), screenshots, etc. -->

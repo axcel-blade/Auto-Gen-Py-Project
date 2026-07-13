@@ -1,130 +1,56 @@
 name: CD
 
-# Continuous Deployment pipeline:
-#
-#   build+test : triggered on every push to main and on GitHub Release
-#                runs lint, tests, and builds wheel + sdist
-#
-#   production : triggered only when a GitHub Release is published
-#                deploys to PyPI via OIDC Trusted Publisher (no API token needed)
-#
-# Required GitHub settings:
-#   - Environment "pypi" with a Trusted Publisher configured at
-#     https://pypi.org/manage/account/publishing/
-#   - id-token: write permission (granted per job below)
-
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   release:
     types: [published]
 
 permissions:
   contents: read
 
-concurrency:
-  group: cd-${{ github.ref }}
-  cancel-in-progress: false
-
-env:
-  PYTHON_VERSION: "3.x"
-  DIST_DIR: dist
-
 jobs:
-  # ------------------------------------------------------------------
-  # 1. Lint and test
-  # ------------------------------------------------------------------
   test:
-    name: Pre-deploy tests
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
-
-      - name: Install package and test deps
-        run: |
+          python-version: "3.12"
+      - run: |
           python -m pip install --upgrade pip
-          pip install -e .
-          pip install pytest pytest-cov ruff
+          python -m pip install -e ".[dev]"
+          pytest -q
 
-      - name: Lint
-        run: python -m ruff check auto_gen_py_project/ tests/
-
-      - name: Run tests
-        run: |
-          mkdir -p build/test-results
-          python -m pytest tests/test_build_system.py -v --tb=short \
-            --junit-xml=build/test-results/test.xml
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-cd
-          path: build/test-results/
-          retention-days: 7
-
-  # ------------------------------------------------------------------
-  # 2. Build distributions (wheel + sdist)
-  # ------------------------------------------------------------------
   build:
-    name: Build distributions
-    runs-on: ubuntu-latest
     needs: test
-
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
-
-      - name: Build wheel and sdist
-        run: |
+          python-version: "3.12"
+      - run: |
           python -m pip install build twine
           python -m build
           python -m twine check dist/*
-
-      - name: Upload distributions artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: dist-${{ github.sha }}
-          path: ${{ env.DIST_DIR }}/
-          retention-days: 7
+          path: dist/
 
-  # ------------------------------------------------------------------
-  # 3. Deploy to PyPI — only on a published GitHub Release
-  # ------------------------------------------------------------------
   deploy-pypi:
-    name: Deploy to PyPI
-    runs-on: ubuntu-latest
     needs: build
     if: github.event_name == 'release' && github.event.action == 'published'
-
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
-
     environment:
       name: pypi
-      url: https://pypi.org/project/auto-gen-py-project/${{ github.event.release.tag_name }}
-
+      url: https://pypi.org/project/auto-gen-py-project/
     steps:
-      - name: Download distributions
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: dist-${{ github.sha }}
-          path: ${{ env.DIST_DIR }}/
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: ${{ env.DIST_DIR }}/
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

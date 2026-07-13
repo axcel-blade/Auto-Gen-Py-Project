@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest a new feature or enhancement
+about: Suggest a new feature or enhancement for auto-gen-py-project
 title: '[FEAT] '
 labels: enhancement
 assignees: ''
@@ -16,7 +16,7 @@ assignees: ''
 
 ## Proposed Solution
 
-<!-- Describe how you envision the feature working. -->
+<!-- Describe how you envision the feature working (CLI flags, templates, plugins). -->
 
 ## Alternatives Considered
 
@@ -24,4 +24,4 @@ assignees: ''
 
 ## Additional Context
 
-<!-- Any other context, mockups, or references. -->
+<!-- Mockups, related issues, or references to ROADMAP.md items. -->

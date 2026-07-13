@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-We as contributors and maintainers pledge to make participation in this project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+We as contributors and maintainers pledge to make participation in **auto-gen-py-project** a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 ## Our Standards
 
@@ -22,14 +22,12 @@ Examples of unacceptable behavior:
 - Publishing others' private information without explicit permission
 - Other conduct which could reasonably be considered inappropriate in a professional setting
 
-## Our Responsibilities
-
-Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
-
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening a [GitHub Issue](https://github.com/axcel-blade/Auto-Gen-Py-Project/issues/new). All complaints will be reviewed and investigated and will result in a response deemed necessary and appropriate to the circumstances.
+Project maintainers are responsible for clarifying and enforcing standards. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported via [GitHub Issues](https://github.com/axcel-blade/Auto-Gen-Py-Project/issues) (mark sensitive reports appropriately) or GitHub Security Advisories when privacy is required.
+
+Maintainers who do not follow or enforce this Code of Conduct may be permanently removed from the project team.
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1.
+This Code of Conduct is adapted from the Contributor Covenant, version 1.4.

@@ -1,0 +1,9 @@
+﻿{
+  "id": "desktop",
+  "name": "desktop",
+  "description": "Built-in desktop project template",
+  "project_types": ["desktop"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "desktop"]
+}

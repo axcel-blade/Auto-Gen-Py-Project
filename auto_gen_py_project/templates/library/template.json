@@ -1,0 +1,9 @@
+﻿{
+  "id": "library",
+  "name": "library",
+  "description": "Built-in library project template",
+  "project_types": ["library"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "library"]
+}

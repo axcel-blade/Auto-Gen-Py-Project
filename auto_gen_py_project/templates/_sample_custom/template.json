@@ -1,0 +1,8 @@
+{
+  "id": "sample-custom",
+  "name": "Sample Custom Template",
+  "description": "Demonstrates Jinja2 file templates",
+  "project_types": ["library"],
+  "version": "1.0.0",
+  "tags": ["sample", "jinja"]
+}

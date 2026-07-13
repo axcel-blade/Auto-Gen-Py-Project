@@ -1,0 +1,9 @@
+﻿{
+  "id": "rest-api",
+  "name": "rest-api",
+  "description": "Built-in rest-api project template",
+  "project_types": ["rest-api"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "rest-api"]
+}

@@ -1,0 +1,9 @@
+﻿{
+  "id": "computer-vision",
+  "name": "computer-vision",
+  "description": "Built-in computer-vision project template",
+  "project_types": ["computer-vision"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "computer-vision"]
+}

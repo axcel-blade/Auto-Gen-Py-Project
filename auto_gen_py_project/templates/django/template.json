@@ -1,0 +1,9 @@
+﻿{
+  "id": "django",
+  "name": "django",
+  "description": "Built-in django project template",
+  "project_types": ["django"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "django"]
+}

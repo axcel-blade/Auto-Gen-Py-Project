@@ -1,0 +1,9 @@
+﻿{
+  "id": "ai",
+  "name": "ai",
+  "description": "Built-in ai project template",
+  "project_types": ["ai"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "ai"]
+}

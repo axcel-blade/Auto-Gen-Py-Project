@@ -1,0 +1,9 @@
+﻿{
+  "id": "machine-learning",
+  "name": "machine-learning",
+  "description": "Built-in machine-learning project template",
+  "project_types": ["machine-learning"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "machine-learning"]
+}

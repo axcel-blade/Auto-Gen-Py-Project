@@ -1,0 +1,9 @@
+﻿{
+  "id": "fastapi",
+  "name": "fastapi",
+  "description": "Built-in fastapi project template",
+  "project_types": ["fastapi"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "fastapi"]
+}

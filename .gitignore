@@ -1,16 +1,42 @@
+# Byte-compiled / cache
 __pycache__/
-dist/
-build/
-my_project/
-auto_gen_py_project.egg-info/
+*.py[cod]
+*$py.class
+.Python
 
-*.pyc
-.env
-CLAUDE.md
-.claude/
+# Virtual environments
 .venv/
-.pybuild-cache.json
-requirements.lock
-htmlcov/
+venv/
+env/
+
+# Distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing
+.pytest_cache/
 .coverage
-coverage.xml
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Secrets / local
+.env
+.env.*
+!.env.example
+*.log
+tmp/
+temp/
+
+# Generated examples (local)
+examples/generated-sample/*
+!examples/generated-sample/.gitkeep

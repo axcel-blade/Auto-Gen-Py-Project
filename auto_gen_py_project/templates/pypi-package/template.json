@@ -1,0 +1,9 @@
+﻿{
+  "id": "pypi-package",
+  "name": "pypi-package",
+  "description": "Built-in pypi-package project template",
+  "project_types": ["pypi-package"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "pypi-package"]
+}

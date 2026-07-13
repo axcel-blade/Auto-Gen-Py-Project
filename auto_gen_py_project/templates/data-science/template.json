@@ -1,0 +1,9 @@
+﻿{
+  "id": "data-science",
+  "name": "data-science",
+  "description": "Built-in data-science project template",
+  "project_types": ["data-science"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "data-science"]
+}

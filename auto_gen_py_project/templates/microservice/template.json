@@ -1,0 +1,9 @@
+﻿{
+  "id": "microservice",
+  "name": "microservice",
+  "description": "Built-in microservice project template",
+  "project_types": ["microservice"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "microservice"]
+}

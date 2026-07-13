@@ -1,172 +1,31 @@
 name: CI
 
-# Runs on every Git Flow branch type so quality gates are enforced everywhere:
-#   feature/* — new features branched from develop
-#   release/* — release-prep branches branched from develop
-#   hotfix/*  — production patch branches branched from main
-#   develop   — integration branch (also PR target for features)
-#   main      — production branch (PR target for release/* and hotfix/*)
-
 on:
   push:
-    branches:
-      - develop
-      - "feature/**"
-      - "release/**"
-      - "hotfix/**"
+    branches: [main, master]
   pull_request:
-    branches:
-      - main
-      - develop
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
-  # ------------------------------------------------------------------
-  # 1. Test matrix — Python 3.9 / 3.11 / 3.13
-  # ------------------------------------------------------------------
   test:
-    name: Test (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        python-version: ["3.9", "3.11", "3.13"]
-
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
-
-      - name: Install package and test deps
+      - name: Install
         run: |
           python -m pip install --upgrade pip
-          pip install -e .
-          pip install pytest pytest-cov ruff
-
-      - name: Lint
-        run: python -m ruff check auto_gen_py_project/ tests/
-
-      # Run only the fast build-system tests in CI.
-      # test_generator.py creates real venvs per test (~10 s each);
-      # run it locally before opening a PR: python -m pytest tests/
-      - name: Run tests
+          python -m pip install -e ".[dev]"
+      - name: Test
+        run: pytest -q --cov=auto_gen_py_project --cov-report=term-missing
+      - name: CLI smoke
         run: |
-          mkdir -p build/test-results
-          python -m pytest tests/test_build_system.py -v --tb=short \
-            --junit-xml=build/test-results/test.xml
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-py${{ matrix.python-version }}
-          path: build/test-results/
-          retention-days: 7
-
-  # ------------------------------------------------------------------
-  # 2. Coverage report
-  # ------------------------------------------------------------------
-  coverage:
-    name: Coverage report
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-          cache: pip
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e .
-          pip install pytest pytest-cov
-
-      - name: Run coverage
-        run: |
-          mkdir -p build/reports build/test-results
-          python -m pytest tests/test_build_system.py \
-            --cov=auto_gen_py_project \
-            --cov-report=xml:build/reports/coverage.xml \
-            --cov-report=html:build/reports/coverage \
-            --cov-report=term-missing \
-            --junit-xml=build/test-results/test.xml
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: build/reports/
-          retention-days: 14
-
-  # ------------------------------------------------------------------
-  # 3. Build verification — confirms the package builds and passes
-  #    twine's metadata checks before any merge
-  # ------------------------------------------------------------------
-  build-check:
-    name: Build verification
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-          cache: pip
-
-      - name: Install build tooling
-        run: python -m pip install build twine
-
-      - name: Build distributions
-        run: python -m build
-
-      - name: Verify distributions with twine
-        run: python -m twine check dist/*
-
-  # ------------------------------------------------------------------
-  # 4. Release-branch extra check — version consistency gate.
-  #    Only runs on release/* and hotfix/* to catch version drift
-  #    before a merge to main triggers the PyPI publish.
-  # ------------------------------------------------------------------
-  version-check:
-    name: Version consistency
-    runs-on: ubuntu-latest
-    if: |
-      startsWith(github.ref, 'refs/heads/release/') ||
-      startsWith(github.ref, 'refs/heads/hotfix/')  ||
-      (github.event_name == 'pull_request' && github.base_ref == 'main')
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      - name: Check version consistency across files
-        run: |
-          INIT_VER=$(python -c "import re, pathlib; m=re.search(r'__version__\s*=\s*\"([^\"]+)\"', pathlib.Path('auto_gen_py_project/__init__.py').read_text()); print(m.group(1))")
-          SETUP_VER=$(python -c "import re, pathlib; m=re.search(r'version=\"([^\"]+)\"', pathlib.Path('setup.py').read_text()); print(m.group(1))")
-          echo "  __init__.py : $INIT_VER"
-          echo "  setup.py    : $SETUP_VER"
-          if [ "$INIT_VER" != "$SETUP_VER" ]; then
-            echo "ERROR: Version mismatch between __init__.py ($INIT_VER) and setup.py ($SETUP_VER)"
-            exit 1
-          fi
-          echo "OK: versions match ($INIT_VER)"
+          python -m auto_gen_py_project version
+          python -m auto_gen_py_project doctor
+          python -m auto_gen_py_project list-templates

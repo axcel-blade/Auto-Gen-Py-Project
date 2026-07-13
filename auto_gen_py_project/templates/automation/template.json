@@ -1,0 +1,9 @@
+﻿{
+  "id": "automation",
+  "name": "automation",
+  "description": "Built-in automation project template",
+  "project_types": ["automation"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "automation"]
+}

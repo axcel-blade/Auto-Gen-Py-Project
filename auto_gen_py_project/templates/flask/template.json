@@ -1,0 +1,9 @@
+﻿{
+  "id": "flask",
+  "name": "flask",
+  "description": "Built-in flask project template",
+  "project_types": ["flask"],
+  "version": "1.0.0",
+  "engine": "builtin",
+  "tags": ["builtin", "flask"]
+}
