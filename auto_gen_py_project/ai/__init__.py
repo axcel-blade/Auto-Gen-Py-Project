@@ -1,7 +1,7 @@
-"""AI extensibility interfaces (no vendor lock-in).
+"""Keyword-based template hint helpers (not an LLM / AI service).
 
-Core scaffolding never requires a network LLM. Implementations of
-:class:`AIProvider` can be injected for recommendations and enrichment.
+Scaffolding never requires network calls for recommendations.
+``AIService`` / ``AIProvider`` names are kept for import stability.
 """
 
 from __future__ import annotations
@@ -13,10 +13,10 @@ from auto_gen_py_project.core.models import ProjectSpec, ProjectType
 
 
 class AIProvider(ABC):
-    """Pluggable AI backend for future assisted generation.
+    """Pluggable hint backend (keyword/heuristic today).
 
-    Core generation never requires an AI provider. Future plugins can implement
-    this interface to recommend templates, fill specs, or generate code.
+    Core generation never requires a provider. Implementations may recommend
+    templates or refine specs; names are kept for import stability.
     """
 
     name: str = "noop"
@@ -76,7 +76,7 @@ class NoopAIProvider(AIProvider):
 
 
 class AIService:
-    """Facade used by the CLI / generator; swappable provider."""
+    """Facade used by the CLI / generator for optional description hints."""
 
     def __init__(self, provider: Optional[AIProvider] = None) -> None:
         self.provider = provider or NoopAIProvider()

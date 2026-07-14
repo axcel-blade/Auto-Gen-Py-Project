@@ -32,4 +32,4 @@ Maintainers who do not follow or enforce this Code of Conduct may be permanently
 
 This Code of Conduct is adapted from the Contributor Covenant, version 1.4.
 
-Package version documented alongside this policy: **1.2.3** (MIT License).
+Package version documented alongside this policy: **1.2.4** (MIT License).

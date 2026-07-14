@@ -2,7 +2,7 @@
 
 ## What is auto-gen-py-project?
 
-A CLI that scaffolds production-ready Python projects (library, CLI, FastAPI, Django, data/ML, and more).
+A CLI that scaffolds production-ready Python projects (library, CLI, FastAPI, Django, data/ML, and more). It is a template-based generator — not an AI product and it does not call LLMs.
 
 ## How do I check the installed version?
 
@@ -10,11 +10,19 @@ A CLI that scaffolds production-ready Python projects (library, CLI, FastAPI, Dj
 auto-gen-py-project version
 ```
 
-Current docs target **1.2.3**.
+Current docs target **1.2.4**.
 
-## Does generation require an AI API key?
+## Does generation require an API key?
 
-No. The default AI layer uses heuristics. Real LLM backends can be plugged in later via `AIProvider`.
+No. Scaffolding runs fully offline aside from optional dependency installs you choose to run.
+
+## How do I pick a template from a description?
+
+```bash
+auto-gen-py-project new Shop --describe "FastAPI service with Docker"
+```
+
+Matching is simple keyword/heuristics against built-in project types.
 
 ## Where are user defaults stored?
 
