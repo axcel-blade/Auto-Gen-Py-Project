@@ -1,6 +1,6 @@
 # API
 
-Programmatic API for **auto-gen-py-project** v1.2.2.
+Programmatic API for **auto-gen-py-project** v1.2.3.
 
 ## ProjectGenerator
 

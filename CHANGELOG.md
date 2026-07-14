@@ -2,6 +2,13 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.3
+
+### Fixed
+
+- CD publishes **TestPyPI only**; added `id-token: write` so TestPyPI OIDC/token publish works
+- Removed production PyPI deploy job that failed Trusted Publishing
+
 ## 1.2.2
 
 ### Fixed

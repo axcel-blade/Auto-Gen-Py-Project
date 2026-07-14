@@ -1,6 +1,6 @@
 # Templates and plugins
 
-Applies to **auto-gen-py-project** v1.2.2.
+Applies to **auto-gen-py-project** v1.2.3.
 
 ## Built-in templates
 
