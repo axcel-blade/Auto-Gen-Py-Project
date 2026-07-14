@@ -2,14 +2,17 @@ name: CD
 
 # Continuous Deployment
 # - test + build on push to main
-# - publish on GitHub Release
+# - on GitHub Release: publish ONLY to TestPyPI (account: axcelblade)
 #
-# Preferred: Trusted Publishing (OIDC) — see docs/publishing.md
-# Fallback: API token secrets (never commit tokens):
-#   PYPI_API_TOKEN       → production https://pypi.org
-#   TEST_PYPI_API_TOKEN  → TestPyPI https://test.pypi.org  (account: axcelblade)
+# Auth (one of):
+#   A) Repo secret TEST_PYPI_API_TOKEN  (recommended right now)
+#   B) Trusted Publisher on test.pypi.org matching:
+#        Owner: axcel-blade
+#        Repo: Auto-Gen-Py-Project
+#        Workflow: cd.yml
+#        Environment: test-pypi
 #
-# Twine username with API tokens is always __token__ (action sets this).
+# Never commit tokens. Twine username with API tokens is __token__.
 
 on:
   push:
@@ -50,36 +53,14 @@ jobs:
           name: dist-${{ github.sha }}
           path: dist/
 
-  # Production PyPI:
-  # - Prefer Trusted Publisher (OIDC) when PYPI_API_TOKEN is unset
-  # - Or set repo secret PYPI_API_TOKEN for password-based upload
-  deploy-pypi:
-    needs: build
-    if: github.event_name == 'release' && github.event.action == 'published'
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    environment:
-      name: pypi
-      url: https://pypi.org/project/auto-gen-py-project/
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist-${{ github.sha }}
-          path: dist/
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          # When this secret is empty, the action falls back to OIDC trusted publishing.
-          password: ${{ secrets.PYPI_API_TOKEN }}
-
-  # TestPyPI for account axcelblade — requires repo secret TEST_PYPI_API_TOKEN.
+  # TestPyPI only — no production PyPI deploy.
   deploy-test-pypi:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'published'
     runs-on: ubuntu-latest
     permissions:
+      # Required so OIDC works when TEST_PYPI_API_TOKEN is unset
+      id-token: write
       contents: read
     environment:
       name: test-pypi
@@ -89,9 +70,20 @@ jobs:
         with:
           name: dist-${{ github.sha }}
           path: dist/
+      - name: Require TestPyPI credentials
+        env:
+          TEST_PYPI_API_TOKEN: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        run: |
+          if [ -z "${TEST_PYPI_API_TOKEN}" ]; then
+            echo "::error::Missing secret TEST_PYPI_API_TOKEN. Add it under Settings → Secrets, or configure a Trusted Publisher on test.pypi.org for environment 'test-pypi'."
+            # Continue: OIDC may still work if Trusted Publisher is configured
+          else
+            echo "Using TEST_PYPI_API_TOKEN for TestPyPI upload"
+          fi
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           skip-existing: true
+          verbose: true

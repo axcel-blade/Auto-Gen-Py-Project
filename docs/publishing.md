@@ -1,82 +1,53 @@
-# Publishing to PyPI / TestPyPI
+# Publishing (TestPyPI only)
 
-## Accounts
+This project’s CD workflow publishes **only to TestPyPI** on GitHub Releases.
 
-| Site | Account username | Package name |
-|------|------------------|--------------|
+## Account
+
+| Site | Username | Package |
+|------|----------|---------|
 | [TestPyPI](https://test.pypi.org/) | `axcelblade` | `auto-gen-py-project` |
-| [PyPI](https://pypi.org/) | (your production account) | `auto-gen-py-project` |
 
-GitHub repo owner (`axcel-blade`) and TestPyPI username (`axcelblade`) are different on purpose — Trusted Publisher settings must use the **GitHub** owner/repo names, while you log into TestPyPI as `axcelblade`.
+## Fix: `ACTIONS_ID_TOKEN_REQUEST_TOKEN was unset`
 
-## Security
+The publish job must request an OIDC token when using Trusted Publishing:
 
-- Never paste PyPI / TestPyPI API tokens into chat, issues, or commits.
-- If a token was exposed, **revoke it immediately** and create a new one.
-- Prefer [Trusted Publishing (OIDC)](https://docs.pypi.org/trusted-publishers/) over long-lived API tokens.
-- For API-token uploads, Twine username is always `__token__` (not `axcelblade`); password is the token value.
+```yaml
+permissions:
+  id-token: write
+  contents: read
+```
 
-## Why `invalid-publisher` happens
+That is set on the `deploy-test-pypi` job in `.github/workflows/cd.yml`.
 
-GitHub Actions successfully minted an OIDC token, but PyPI/TestPyPI found **no Trusted Publisher** matching it.
+## Recommended: API token secret
 
-### Production PyPI (`deploy-pypi` job)
+1. Log into TestPyPI as **`axcelblade`**
+2. Create a token at https://test.pypi.org/manage/account/token/
+3. GitHub → **Settings → Secrets and variables → Actions**
+   - Name: `TEST_PYPI_API_TOKEN`
+   - Value: the new token (**never** paste tokens in chat/issues)
+4. Create Environment **`test-pypi`** (Settings → Environments)
+5. Re-run the CD workflow for the release (or publish a new patch release so the updated workflow is on the tag)
 
-| Field | Required value |
-|-------|----------------|
-| Owner | `axcel-blade` |
-| Repository | `Auto-Gen-Py-Project` |
-| Workflow filename | `cd.yml` |
-| Environment | `pypi` |
-| Project / package name | `auto-gen-py-project` |
+Twine / the publish action use username **`__token__`** with that secret as the password.
 
-Configure at: https://pypi.org/manage/account/publishing/ (logged into production PyPI).
+## Alternative: Trusted Publisher (OIDC)
 
-### TestPyPI (`deploy-test-pypi` job) — account `axcelblade`
+On https://test.pypi.org/manage/account/publishing/ (as `axcelblade`), add:
 
-| Field | Required value |
-|-------|----------------|
+| Field | Value |
+|-------|--------|
 | Owner | `axcel-blade` |
 | Repository | `Auto-Gen-Py-Project` |
 | Workflow filename | `cd.yml` |
 | Environment | `test-pypi` |
-| Project / package name | `auto-gen-py-project` |
+| Project name | `auto-gen-py-project` |
 
-Configure at: https://test.pypi.org/manage/account/publishing/ while logged in as **`axcelblade`**.
+Then you can omit `TEST_PYPI_API_TOKEN` (OIDC will be used).
 
-Also create GitHub Environments named `pypi` and/or `test-pypi`, and set repo variable `ENABLE_TEST_PYPI=true` to run the TestPyPI job on releases.
+## Security
 
-## GitHub Actions secrets
-
-Add secrets under **Settings → Secrets and variables → Actions** (do not paste tokens in chat):
-
-| Secret | Used for |
-|--------|----------|
-| `TEST_PYPI_API_TOKEN` | Publish to TestPyPI (`axcelblade`) on each GitHub Release |
-| `PYPI_API_TOKEN` | Publish to production PyPI (skips OIDC when set) |
-
-Also create GitHub Environments named `pypi` and `test-pypi`.
-
-After adding `TEST_PYPI_API_TOKEN`, re-run the failed **CD** workflow on the `v1.2.2` release (Actions → CD → Re-run jobs), or publish a new release.
-
-## Manual upload (local)
-
-```bash
-python -m pip install build twine
-python -m build
-
-# TestPyPI as axcelblade — create a fresh token in the website UI first
-# Username must be __token__ when using an API token:
-twine upload --repository testpypi dist/*
-# or:
-twine upload --repository-url https://test.pypi.org/legacy/ -u __token__ -p <TEST_PYPI_TOKEN> dist/*
-
-# Production PyPI:
-twine upload dist/*
-```
-
-Install a TestPyPI build:
-
-```bash
-python -m pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ auto-gen-py-project
-```
+- Never commit or paste API tokens.
+- Revoke any token that was exposed in chat or logs.
+- Production PyPI deploy is **disabled** in CD by design.
