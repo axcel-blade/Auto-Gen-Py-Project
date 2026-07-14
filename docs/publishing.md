@@ -57,7 +57,7 @@ Add secrets under **Settings → Secrets and variables → Actions** (do not pas
 
 Also create GitHub Environments named `pypi` and `test-pypi`.
 
-After adding `TEST_PYPI_API_TOKEN`, re-run the failed **CD** workflow on the `v1.2.1` release (Actions → CD → Re-run jobs), or publish a new release.
+After adding `TEST_PYPI_API_TOKEN`, re-run the failed **CD** workflow on the `v1.2.2` release (Actions → CD → Re-run jobs), or publish a new release.
 
 ## Manual upload (local)
 

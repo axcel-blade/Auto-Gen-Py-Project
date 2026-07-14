@@ -1,6 +1,6 @@
 # Cookbook
 
-Practical recipes for **auto-gen-py-project** v1.2.1.
+Practical recipes for **auto-gen-py-project** v1.2.2.
 
 ## FastAPI service with Docker
 

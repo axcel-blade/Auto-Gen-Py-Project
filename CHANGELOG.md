@@ -2,6 +2,16 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.2
+
+### Fixed
+
+- Release CD can publish using `TEST_PYPI_API_TOKEN` / `PYPI_API_TOKEN` when Trusted Publishing is not configured
+
+### Changed
+
+- Documented TestPyPI account `axcelblade` and GitHub secret setup in `docs/publishing.md`
+
 ## 1.2.1
 
 ### Changed

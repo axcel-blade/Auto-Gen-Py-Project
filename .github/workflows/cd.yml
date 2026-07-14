@@ -50,7 +50,9 @@ jobs:
           name: dist-${{ github.sha }}
           path: dist/
 
-  # Production PyPI: uses PYPI_API_TOKEN if set; otherwise OIDC trusted publisher.
+  # Production PyPI:
+  # - Prefer Trusted Publisher (OIDC) when PYPI_API_TOKEN is unset
+  # - Or set repo secret PYPI_API_TOKEN for password-based upload
   deploy-pypi:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'published'

@@ -5,6 +5,7 @@ Future plans for **auto-gen-py-project**.
 ## v1.2.x (current)
 
 - MIT-licensed package distribution via **LICENSE.md**
+- Release CD supports Trusted Publishing (OIDC) or API token secrets (`TEST_PYPI_API_TOKEN` / `PYPI_API_TOKEN`)
 - Stable CLI (`create`, `new`, `init`, plugins, doctor)
 - Built-in scaffolds for common Python project types
 - Config file defaults (TOML / YAML / JSON)

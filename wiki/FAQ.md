@@ -10,7 +10,7 @@ A CLI that scaffolds production-ready Python projects (library, CLI, FastAPI, Dj
 auto-gen-py-project version
 ```
 
-Current docs target **1.2.1**.
+Current docs target **1.2.2**.
 
 ## Does generation require an AI API key?
 

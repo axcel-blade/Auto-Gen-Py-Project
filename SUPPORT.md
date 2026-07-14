@@ -1,6 +1,6 @@
 # Support
 
-Need help with **auto-gen-py-project** v1.2.1?
+Need help with **auto-gen-py-project** v1.2.2?
 
 ## Where to look first
 
