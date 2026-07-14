@@ -1,5 +1,7 @@
 # Publishing (TestPyPI only)
 
+Applies to package **auto-gen-py-project** v1.2.4+.
+
 This project’s CD workflow publishes **only to TestPyPI** on GitHub Releases.
 
 ## Account

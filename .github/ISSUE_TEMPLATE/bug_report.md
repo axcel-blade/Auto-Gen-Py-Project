@@ -28,7 +28,7 @@ assignees: ''
 
 - OS: <!-- e.g. Windows 11, Ubuntu 22.04 -->
 - Python version: <!-- e.g. 3.12.2 -->
-- auto-gen-py-project version: <!-- output of `auto-gen-py-project version` (e.g. 1.2.3) -->
+- auto-gen-py-project version: <!-- output of `auto-gen-py-project version` (e.g. 1.2.4) -->
 - `auto-gen-py-project doctor` output:
 
 ```text
@@ -37,4 +37,4 @@ paste here
 
 ## Additional Context
 
-<!-- Templates used, flags (`--docker`, `--ai`, …), screenshots, etc. -->
+- Templates used, flags (`--docker`, `--describe`, …), screenshots, etc.

@@ -9,7 +9,8 @@ Future plans for **auto-gen-py-project**.
 - Stable CLI (`create`, `new`, `init`, plugins, doctor)
 - Built-in scaffolds for common Python project types
 - Config file defaults (TOML / YAML / JSON)
-- Extensible AI provider interface (heuristic default)
+- Extensible plugin and template APIs
+- Optional keyword-based template hints via `--describe`
 
 ## v1.3
 
@@ -19,8 +20,7 @@ Future plans for **auto-gen-py-project**.
 
 ## v1.4
 
-- First-class AI-assisted generation plugins (opt-in)
-- Template recommendation from natural-language descriptions with pluggable backends
+- Richer template recommendation from project descriptions
 - Post-generation “doctor” suggestions inside the new project
 
 ## v2.0
