@@ -216,7 +216,11 @@ def new_cmd(
     no_git: bool = typer.Option(False, "--no-git"),
     venv: bool = typer.Option(False, "--venv"),
     install: bool = typer.Option(False, "--install"),
-    ai_prompt: Optional[str] = typer.Option(None, "--ai", help="Optional AI/heuristic prompt"),
+    ai_prompt: Optional[str] = typer.Option(
+        None,
+        "--describe",
+        help="Optional free-text description used to pick a template by keywords",
+    ),
     force: bool = typer.Option(False, "--force"),
     debug: bool = typer.Option(False, "--debug"),
 ) -> None:
@@ -226,7 +230,7 @@ def new_cmd(
     try:
         ptype = ProjectType(template)
     except ValueError:
-        # allow AI recommendation
+        # Fall back to keyword-based template recommendation from --describe
         if ai_prompt:
             ptype = AIService().recommend_template(ai_prompt)
         else:

@@ -1,6 +1,6 @@
 # API
 
-Programmatic API for **auto-gen-py-project** v1.2.3.
+Programmatic API for **auto-gen-py-project** v1.2.4.
 
 ## ProjectGenerator
 
@@ -18,25 +18,17 @@ spec = ProjectSpec(
 ProjectGenerator().generate(spec, Path("demo-out"))
 ```
 
-## AIProvider
+## Template hints (keyword matching)
+
+Optional helpers live under `auto_gen_py_project.ai` for historical import paths.
+They use simple keyword matching — not an LLM or external AI service.
 
 ```python
-from auto_gen_py_project.ai import AIProvider, AIService
+from auto_gen_py_project.ai import AIService
 from auto_gen_py_project.core.models import ProjectType
 
-class MyAI(AIProvider):
-    name = "my-ai"
-
-    def recommend_template(self, description: str) -> ProjectType:
-        ...
-
-    def enrich_spec(self, spec, prompt: str):
-        ...
-
-    def generate_snippet(self, prompt: str, *, language: str = "python") -> str:
-        ...
-
-AIService(MyAI())
+service = AIService()
+assert service.recommend_template("FastAPI microservice") == ProjectType.FASTAPI
 ```
 
 ## Config

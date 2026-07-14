@@ -1,6 +1,6 @@
 # Cookbook
 
-Practical recipes for **auto-gen-py-project** v1.2.3.
+Practical recipes for **auto-gen-py-project** v1.2.4.
 
 ## FastAPI service with Docker
 
@@ -14,10 +14,10 @@ auto-gen-py-project new InventoryAPI -t fastapi --docker --path ./inventory-api
 auto-gen-py-project new CoolLib -t pypi-package --no-git
 ```
 
-## Heuristic “AI” template pick
+## Template from a short description
 
 ```bash
-auto-gen-py-project new Shop --ai "Flask storefront with pytest"
+auto-gen-py-project new Shop --describe "Flask storefront with pytest"
 ```
 
 ## Programmatic generation

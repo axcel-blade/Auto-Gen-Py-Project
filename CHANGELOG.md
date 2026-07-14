@@ -2,6 +2,15 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.4
+
+### Changed
+
+- Dropped “AI-ready” marketing from README and docs; packaging is a template scaffolder only
+- Renamed CLI flag `--ai` to `--describe` for keyword-based template hints (no LLM / network)
+- Clarified FAQ, API, Cookbook, and ROADMAP that hints are offline heuristics
+- Version bump across package metadata and community docs
+
 ## 1.2.3
 
 ### Fixed
@@ -43,7 +52,7 @@ All notable changes to **auto-gen-py-project** are documented here.
 - Interactive `create` wizard and non-interactive `new` / `init`
 - Built-in scaffolds for 16 project types
 - Integrations: git, venv, Docker, GitHub Actions, pre-commit, VS Code
-- AI provider interface for future assisted generation
+- Optional keyword-based template hints (`--describe`)
 - GitHub community docs: TODO, ROADMAP, wiki pages, discussion templates
 
 ### Changed
