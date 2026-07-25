@@ -2,6 +2,13 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.7
+
+### Changed
+
+- Package metadata author set to **Axcel Blade** (was “auto-gen-py-project contributors”)
+- Version bump across package metadata and community docs
+
 ## 1.2.6
 
 ### Added

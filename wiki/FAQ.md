@@ -18,7 +18,7 @@ python -m auto_gen_py_project version
 python -m auto_gen_py_project doctor
 ```
 
-Current docs target **1.2.6**.
+Current docs target **1.2.7**.
 
 ## Does generation require an API key?
 

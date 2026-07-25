@@ -1,6 +1,6 @@
 # Publishing (TestPyPI + PyPI)
 
-Applies to package **auto-gen-py-project** v1.2.6+.
+Applies to package **auto-gen-py-project** v1.2.7+.
 
 On each GitHub Release, CD publishes to **TestPyPI**, then **production PyPI**.
 

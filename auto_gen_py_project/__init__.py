@@ -6,5 +6,5 @@ Public package version is defined here and must stay in sync with
 
 from __future__ import annotations
 
-__version__ = "1.2.6"
+__version__ = "1.2.7"
 __all__ = ["__version__"]
