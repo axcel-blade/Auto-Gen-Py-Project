@@ -244,9 +244,17 @@ def _run_generate(
 
 @app.command("init")
 def init_cmd(
-    path: Path = typer.Argument(Path("."), help="Directory to initialize"),
-    name: Optional[str] = typer.Option(None, "--name", "-n"),
-    template: str = typer.Option("library", "--template", "-t"),
+    path: Optional[Path] = typer.Argument(
+        None,
+        help="Project root directory. Omit to create a new folder for a simple Python project.",
+    ),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Project name (also used for folder name when PATH is omitted)"),
+    template: str = typer.Option(
+        "library",
+        "--template",
+        "-t",
+        help="Template / project type (default: simple library)",
+    ),
     package_manager: Optional[str] = typer.Option(
         None, "--package-manager", "-m", help="pip|uv|poetry|hatch|pdm"
     ),
@@ -254,21 +262,47 @@ def init_cmd(
     force: bool = typer.Option(False, "--force"),
     debug: bool = typer.Option(False, "--debug"),
 ) -> None:
-    """Initialize a project in an existing or new directory (non-interactive)."""
+    """Create a simple Python project, including the root folder when needed.
+
+    Plain ``init`` (no PATH) creates ``./<name>/`` with a library scaffold inside.
+    With a PATH, that directory is created if missing and filled with the project.
+    """
     setup_logging(debug=debug)
     prefs = _prefs()
-    project_name = name or path.resolve().name
+
+    # Plain `init`: create a new root folder under cwd, then scaffold inside it.
+    if path is None:
+        project_name = name or "my-project"
+        folder = ProjectSpec.normalize_package_name(project_name).replace("_", "-")
+        dest = Path.cwd() / folder
+    else:
+        dest = path
+        if name:
+            project_name = name
+        elif str(path) in (".", ""):
+            project_name = Path.cwd().resolve().name
+        else:
+            project_name = path.name or "my-project"
+
+    # Ensure the project root folder exists before generation.
+    dest = dest.resolve()
+    dest.mkdir(parents=True, exist_ok=True)
+
     ptype, template_id = _resolve_template(template)
     spec = _spec_from_prefs(project_name, project_type=ptype, prefs=prefs)
+    # Keep plain init simple: no auto-install / venv unless prefs already ask for them
     if package_manager:
         try:
             spec.package_manager = PackageManager(package_manager)
         except ValueError:
-            console.print(f"[yellow]Unknown package manager '{package_manager}', using {spec.package_manager.value}[/]")
+            console.print(
+                f"[yellow]Unknown package manager '{package_manager}', "
+                f"using {spec.package_manager.value}[/]"
+            )
     if lock:
         spec.generate_lock = True
     try:
-        _run_generate(spec, path, force=force, template_id=template_id)
+        _run_generate(spec, dest, force=force, template_id=template_id)
     except AutoGenError as exc:
         console.print(f"[red]{exc.message}[/]")
         raise typer.Exit(1) from exc
