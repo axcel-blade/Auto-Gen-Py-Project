@@ -3,7 +3,7 @@
 Python project generator — scaffolds production-ready repos from templates, with plugins, an interactive wizard, and optional tooling (Docker, GitHub Actions, pre-commit, venv).
 
 [![CI](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/badge/version-1.3.1-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
+[![PyPI version](https://img.shields.io/badge/version-1.3.2-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
@@ -49,9 +49,17 @@ Requires **Python 3.12+**. CI tests all three OSes on Python 3.12 and 3.13.
 ## Quick start
 
 ```bash
+# Plain init: creates ./my-project/ with a simple Python library inside
+auto-gen-py-project init
+
+# Named root folder
+auto-gen-py-project init --name CoolLib
+
+# Explicit path (folder is created if missing)
+auto-gen-py-project init ./services/api -n api -t library
+
 auto-gen-py-project create
 auto-gen-py-project new MyApp --template fastapi --docker
-auto-gen-py-project init ./service --name payments --template microservice
 auto-gen-py-project list-templates
 auto-gen-py-project doctor
 ```
@@ -62,14 +70,14 @@ Also available as: `python -m auto_gen_py_project …`
 
 | Command | Description |
 |---------|-------------|
-| `init` | Non-interactive init into a directory |
+| `init` | Create a simple Python project (creates the root folder; default `./my-project/`) |
 | `create` | Interactive wizard |
 | `new NAME` | Create a project from a template |
 | `list-templates` | List templates / project types |
 | `install-template` | Install a template plugin (or local sample) |
 | `doctor` | Environment diagnostics |
 | `update` | Upgrade from PyPI |
-| `version` | Show version (`1.3.1`) |
+| `version` | Show version (`1.3.2`) |
 | `config` | Show / write user defaults |
 | `plugin list\|install\|remove` | Plugin management |
 
