@@ -28,7 +28,7 @@ assignees: ''
 
 - OS: <!-- e.g. Windows 11, macOS 14, Ubuntu 22.04 -->
 - Python version: <!-- e.g. 3.12.2 -->
-- auto-gen-py-project version: <!-- output of `auto-gen-py-project version` (e.g. 1.3.2) -->
+- auto-gen-py-project version: <!-- output of `auto-gen-py-project version` (e.g. 1.3.3) -->
 - `auto-gen-py-project doctor` output:
 
 ```text

@@ -1,6 +1,6 @@
 # Support
 
-Need help with **auto-gen-py-project** v1.3.2?
+Need help with **auto-gen-py-project** v1.3.3?
 
 Supported platforms: **Windows**, **macOS**, and **Linux** (Python 3.12+).
 

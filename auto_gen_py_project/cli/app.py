@@ -244,11 +244,16 @@ def _run_generate(
 
 @app.command("init")
 def init_cmd(
-    path: Optional[Path] = typer.Argument(
+    path: Optional[str] = typer.Argument(
         None,
-        help="Project root directory. Omit to create a new folder for a simple Python project.",
+        help="Project root directory. Omit to create ./my-project/ (or --name) with a simple library.",
     ),
-    name: Optional[str] = typer.Option(None, "--name", "-n", help="Project name (also used for folder name when PATH is omitted)"),
+    name: Optional[str] = typer.Option(
+        None,
+        "--name",
+        "-n",
+        help="Project name (also used for folder name when PATH is omitted)",
+    ),
     template: str = typer.Option(
         "library",
         "--template",
@@ -270,19 +275,23 @@ def init_cmd(
     setup_logging(debug=debug)
     prefs = _prefs()
 
+    # Use str (not Path) for the optional argument so Typer does not coerce
+    # a missing value into Path(".") / the current working directory.
+    path_arg = (path or "").strip()
+
     # Plain `init`: create a new root folder under cwd, then scaffold inside it.
-    if path is None:
+    if not path_arg:
         project_name = name or "my-project"
         folder = ProjectSpec.normalize_package_name(project_name).replace("_", "-")
         dest = Path.cwd() / folder
     else:
-        dest = path
+        dest = Path(path_arg)
         if name:
             project_name = name
-        elif str(path) in (".", ""):
+        elif path_arg in (".",):
             project_name = Path.cwd().resolve().name
         else:
-            project_name = path.name or "my-project"
+            project_name = dest.name or "my-project"
 
     # Ensure the project root folder exists before generation.
     dest = dest.resolve()
@@ -290,7 +299,6 @@ def init_cmd(
 
     ptype, template_id = _resolve_template(template)
     spec = _spec_from_prefs(project_name, project_type=ptype, prefs=prefs)
-    # Keep plain init simple: no auto-install / venv unless prefs already ask for them
     if package_manager:
         try:
             spec.package_manager = PackageManager(package_manager)

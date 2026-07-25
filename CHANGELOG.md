@@ -2,6 +2,16 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.3.3
+
+### Fixed
+
+- Plain ``init`` no longer treats a missing PATH as the current directory (Typer ``Path`` coercion), so it creates ``./my-project/`` even when cwd is not empty
+
+### Changed
+
+- Version bump across package metadata and community docs
+
 ## 1.3.2
 
 ### Changed
