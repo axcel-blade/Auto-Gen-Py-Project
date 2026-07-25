@@ -1,6 +1,6 @@
 # TODO
 
-Task tracking for **auto-gen-py-project** v1.3.3+.
+Task tracking for **auto-gen-py-project** v1.3.4+.
 
 ## Near term
 

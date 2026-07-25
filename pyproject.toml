@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "auto-gen-py-project"
-version = "1.3.3"
+version = "1.3.4"
 description = "Python project generator with templates, plugins, and interactive scaffolding"
 readme = "README.md"
 license = { text = "MIT" }
@@ -55,6 +55,7 @@ dev = [
 
 [project.scripts]
 auto-gen-py-project = "auto_gen_py_project.cli.app:main"
+auto_gen_py_project = "auto_gen_py_project.cli.app:main"
 
 [project.entry-points."auto_gen_py_project.templates"]
 # Built-in templates are registered in code; third-party plugins use this group.

@@ -1,6 +1,6 @@
 # User guide
 
-**auto-gen-py-project** v1.3.3 generates production-ready Python projects from templates on **Windows, macOS, and Linux** (Python 3.12+).
+**auto-gen-py-project** v1.3.4 generates production-ready Python projects from templates on **Windows, macOS, and Linux** (Python 3.12+).
 
 ## Install
 
@@ -24,16 +24,24 @@ Non-interactive:
 auto-gen-py-project new PaymentsAPI -t fastapi --docker --venv --install
 ```
 
-Initialize a simple Python project (creates the root folder):
+Initialize a simple Python project **in the current folder** (flag style, all OS):
 
 ```bash
-auto-gen-py-project init
+auto_gen_py_project --init --force
+# or
+python -m auto_gen_py_project --init --path . --force
+```
+
+Create a new root folder (subcommand):
+
+```bash
+auto_gen_py_project init
 # → ./my-project/ with library scaffold
 
-auto-gen-py-project init --name mylib
+auto_gen_py_project init --name mylib
 # → ./mylib/
 
-auto-gen-py-project init ./service --name payments --template library
+auto_gen_py_project init ./service --name payments --template library
 # → creates ./service/ if missing, then scaffolds inside
 ```
 

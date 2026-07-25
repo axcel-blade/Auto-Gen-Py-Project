@@ -2,6 +2,19 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.3.4
+
+### Added
+
+- Console script ``auto_gen_py_project`` (underscore) alongside ``auto-gen-py-project`` for all OS
+- Flag-style actions: ``--init``, ``--create``, ``--doctor``, ``--list-templates``, ``--version``
+- ``--init`` scaffolds a simple Python project **into** the current or ``--path`` folder
+
+### Changed
+
+- Docs emphasize ``auto_gen_py_project --init`` for in-folder scaffolding
+- Version bump across package metadata and community docs
+
 ## 1.3.3
 
 ### Fixed
