@@ -2,6 +2,16 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.9
+
+### Fixed
+
+- CI `doctor` test expects display name **Auto-Gen-Py-Project** (unblocks PyPI publish after v1.2.8)
+
+### Changed
+
+- Version bump across package metadata and community docs
+
 ## 1.2.8
 
 ### Changed

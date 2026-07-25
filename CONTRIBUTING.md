@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for contributing to **auto-gen-py-project** (v1.2.8).
+Thanks for contributing to **auto-gen-py-project** (v1.2.9).
 
 ## Git Flow
 
