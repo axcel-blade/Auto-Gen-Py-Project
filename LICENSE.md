@@ -38,4 +38,4 @@ SPDX-License-Identifier: MIT
 
 ## Version
 
-Package version **1.3.2**.
+Package version **1.3.3**.

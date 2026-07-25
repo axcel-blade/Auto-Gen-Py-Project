@@ -41,7 +41,7 @@ def test_cli_version():
     result = runner.invoke(app, ["version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.3.2" in out
+    assert "1.3.3" in out
     assert "Auto-Gen-Py-Project" in out
 
 
@@ -49,7 +49,7 @@ def test_cli_version_flag():
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.3.2" in out
+    assert "1.3.3" in out
     assert "Auto-Gen-Py-Project" in out
 
 
@@ -74,12 +74,22 @@ def test_cli_new(tmp_path: Path, monkeypatch):
 def test_cli_plain_init_creates_root_folder(tmp_path: Path, monkeypatch):
     """Plain `init` creates ./my-project/ with a simple library scaffold."""
     monkeypatch.chdir(tmp_path)
-    result = runner.invoke(app, ["init", "--force"])
+    result = runner.invoke(app, ["init"])
     assert result.exit_code == 0, _out(result)
     root = tmp_path / "my-project"
     assert root.is_dir()
     assert (root / "pyproject.toml").exists()
     assert (root / "src" / "my_project" / "__init__.py").exists()
+
+
+def test_cli_plain_init_in_nonempty_cwd(tmp_path: Path, monkeypatch):
+    """Plain init must not target cwd when cwd already has files."""
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "existing.txt").write_text("keep", encoding="utf-8")
+    result = runner.invoke(app, ["init"])
+    assert result.exit_code == 0, _out(result)
+    assert (tmp_path / "my-project" / "pyproject.toml").exists()
+    assert (tmp_path / "existing.txt").read_text(encoding="utf-8") == "keep"
 
 
 def test_cli_init_named_folder(tmp_path: Path, monkeypatch):
@@ -105,5 +115,5 @@ def test_cli_doctor():
     assert result.exit_code == 0
     out = _out(result)
     assert "Auto-Gen-Py-Project" in out
-    assert "1.3.2" in out
+    assert "1.3.3" in out
     assert "Windows, macOS, Linux" in out
