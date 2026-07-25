@@ -41,14 +41,14 @@ def test_cli_version():
     result = runner.invoke(app, ["version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.2.6" in out
+    assert "1.2.7" in out
     assert "auto-gen-py-project" in out
 
 
 def test_cli_version_flag():
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "1.2.6" in _out(result)
+    assert "1.2.7" in _out(result)
 
 
 def test_cli_list_templates():
