@@ -9,5 +9,5 @@ labels: []
 
 ## Environment (optional)
 
-- auto-gen-py-project version: <!-- e.g. 1.2.7 -->
+- auto-gen-py-project version: <!-- e.g. 1.2.8 -->
 - OS / Python:
