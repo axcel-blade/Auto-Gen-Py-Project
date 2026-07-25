@@ -340,13 +340,20 @@ def install_template_cmd(
 @app.command("doctor")
 def doctor_cmd() -> None:
     """Diagnose environment health."""
+    import platform
+    import sysconfig
+
     setup_logging()
     table = Table(title="Doctor")
     table.add_column("Check")
     table.add_column("Result")
     table.add_row(DISPLAY_NAME, __version__)
     table.add_row("python", sys.version.split()[0])
-    table.add_row("platform", sys.platform)
+    table.add_row(
+        "os",
+        f"{platform.system()} {platform.release()} ({sys.platform})",
+    )
+    table.add_row("supported platforms", "Windows, macOS, Linux")
     cli_path = shutil.which("auto-gen-py-project")
     table.add_row("cli on PATH", cli_path or "[red]not found[/]")
     for tool in ("git", "docker", "uv", "poetry", "pdm", "hatch"):
@@ -359,12 +366,10 @@ def doctor_cmd() -> None:
     table.add_row("plugins", str(len(plugins.plugins)))
     table.add_row("templates", str(len(TemplateRegistry(plugins.extra_template_roots).list())))
     console.print(table)
-    # Windows user installs often put the .exe outside PATH
+    # User installs may put the console script outside PATH on any OS
     if not cli_path:
-        import sysconfig
-
         candidates: list[Path] = []
-        for scheme in (None, "nt_user", "posix_user"):
+        for scheme in (None, "nt_user", "posix_user", "osx_framework_user"):
             try:
                 raw = (
                     sysconfig.get_path("scripts")
@@ -379,15 +384,25 @@ def doctor_cmd() -> None:
                     candidates.append(p)
         lines = "\n".join(f"  {p}" for p in candidates) or "  (see python -m site)"
         tip = candidates[-1] if candidates else Path("Scripts")
+        if sys.platform == "win32":
+            path_help = (
+                "PowerShell (user PATH), then open a new terminal:\n"
+                f"  [Environment]::SetEnvironmentVariable(\n"
+                f"    'Path', $env:Path + ';{tip}', 'User')"
+            )
+        else:
+            path_help = (
+                "bash/zsh (add to ~/.bashrc or ~/.zshrc), then reload the shell:\n"
+                f'  export PATH="{tip}:$PATH"'
+            )
         console.print(
             Panel(
                 f"[yellow]Command `auto-gen-py-project` is not on PATH.[/]\n\n"
+                f"Works on Windows, macOS, and Linux.\n"
                 f"Use: [bold]python -m auto_gen_py_project version[/]\n\n"
-                f"Or add a Scripts folder to PATH, then open a new terminal:\n"
+                f"Or add a scripts folder to PATH:\n"
                 f"{lines}\n\n"
-                f"PowerShell (user PATH):\n"
-                f"  [Environment]::SetEnvironmentVariable(\n"
-                f"    'Path', $env:Path + ';{tip}', 'User')",
+                f"{path_help}",
                 title="PATH fix",
             )
         )

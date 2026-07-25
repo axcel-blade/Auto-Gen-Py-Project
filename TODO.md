@@ -1,10 +1,10 @@
 # TODO
 
-Task tracking for **auto-gen-py-project** v1.2.9+.
+Task tracking for **auto-gen-py-project** v1.3.0+.
 
 ## Near term
 
-- [ ] Confirm v1.2.9 on TestPyPI and PyPI via CD (`TEST_PYPI_API_TOKEN` / `PYPI_API_TOKEN`)
+- [ ] Confirm v1.3.0 on TestPyPI and PyPI via CD (`TEST_PYPI_API_TOKEN` / `PYPI_API_TOKEN`)
 - [x] Enable production PyPI deploy in CD
 - [ ] Add end-to-end snapshot tests for each built-in project type
 - [ ] Document custom template authoring with more examples
