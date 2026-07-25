@@ -2,6 +2,19 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.6
+
+### Added
+
+- Root flags `--version` / `-V` (same output as `auto-gen-py-project version`)
+- `doctor` reports whether the CLI is on `PATH` and prints Windows Scripts PATH fix help
+
+### Changed
+
+- `version` prints a plain `auto-gen-py-project X.Y.Z` line plus a panel
+- README documents version checks and the `python -m auto_gen_py_project` fallback
+- Version bump across package metadata and community docs
+
 ## 1.2.5
 
 ### Added
