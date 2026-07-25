@@ -1,20 +1,20 @@
 # TODO
 
-Task tracking for **auto-gen-py-project** v1.3.0+.
+Task tracking for **auto-gen-py-project** v1.3.1+.
 
 ## Near term
 
-- [ ] Confirm v1.3.0 on TestPyPI and PyPI via CD (`TEST_PYPI_API_TOKEN` / `PYPI_API_TOKEN`)
+- [x] Confirm v1.3.0 on TestPyPI and PyPI via CD (`TEST_PYPI_API_TOKEN` / `PYPI_API_TOKEN`)
 - [x] Enable production PyPI deploy in CD
+- [x] Add `uv`/`poetry` lockfile generation options for scaffolds (`--lock`, `-m`)
 - [ ] Add end-to-end snapshot tests for each built-in project type
 - [ ] Document custom template authoring with more examples
-- [ ] Add `uv`/`poetry` lockfile generation options for scaffolds
 
 ## Plugin ecosystem
 
-- [ ] Example plugin package `auto-gen-py-project-fastapi` (extended template)
-- [ ] Example plugin package `auto-gen-py-project-django`
-- [ ] Example plugin package `auto-gen-py-project-ai`
+- [x] Example plugin package `auto-gen-py-project-fastapi` (extended template)
+- [x] Example plugin package `auto-gen-py-project-django`
+- [x] Example plugin package `auto-gen-py-project-ai`
 
 ## Quality
 

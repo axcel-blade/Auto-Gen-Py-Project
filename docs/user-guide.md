@@ -1,6 +1,6 @@
 # User guide
 
-**auto-gen-py-project** v1.3.0 generates production-ready Python projects from templates on **Windows, macOS, and Linux** (Python 3.12+).
+**auto-gen-py-project** v1.3.1 generates production-ready Python projects from templates on **Windows, macOS, and Linux** (Python 3.12+).
 
 ## Install
 

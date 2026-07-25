@@ -3,7 +3,7 @@
 Python project generator — scaffolds production-ready repos from templates, with plugins, an interactive wizard, and optional tooling (Docker, GitHub Actions, pre-commit, venv).
 
 [![CI](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
+[![PyPI version](https://img.shields.io/badge/version-1.3.1-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
@@ -69,9 +69,18 @@ Also available as: `python -m auto_gen_py_project …`
 | `install-template` | Install a template plugin (or local sample) |
 | `doctor` | Environment diagnostics |
 | `update` | Upgrade from PyPI |
-| `version` | Show version (`1.3.0`) |
+| `version` | Show version (`1.3.1`) |
 | `config` | Show / write user defaults |
 | `plugin list\|install\|remove` | Plugin management |
+
+## Lockfiles (uv / poetry)
+
+```bash
+auto-gen-py-project new App -t library -m uv --lock
+auto-gen-py-project init ./svc -n svc -t fastapi -m poetry --lock
+```
+
+Requires the `uv` or `poetry` binary on `PATH`. Soft-fails with a warning if missing.
 
 ## Project types
 
@@ -94,6 +103,7 @@ email = "ada@example.com"
 license = "MIT"
 python_version = "3.12"
 package_manager = "pip"
+generate_lock = false
 ci_provider = "github-actions"
 use_docker = false
 use_git = true
@@ -112,7 +122,12 @@ extra = "my_pkg.templates:get_root"
 ```
 
 ```bash
-pip install auto-gen-py-project-fastapi
+# Local example plugins (see examples/)
+pip install -e ./examples/auto-gen-py-project-fastapi
+pip install -e ./examples/auto-gen-py-project-django
+pip install -e ./examples/auto-gen-py-project-ai
+auto-gen-py-project list-templates
+auto-gen-py-project new Demo -t fastapi-extended
 auto-gen-py-project plugin list
 ```
 

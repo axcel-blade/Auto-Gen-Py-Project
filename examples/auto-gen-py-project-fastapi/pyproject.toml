@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auto-gen-py-project-fastapi"
+version = "0.1.0"
+description = "Example FastAPI extended template plugin for auto-gen-py-project"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Axcel Blade" }]
+dependencies = ["auto-gen-py-project>=1.3.0"]
+
+[project.entry-points."auto_gen_py_project.plugins"]
+fastapi = "auto_gen_py_project_fastapi.plugin:Plugin"
+
+[project.entry-points."auto_gen_py_project.templates"]
+fastapi_extended = "auto_gen_py_project_fastapi.templates:get_root"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+auto_gen_py_project_fastapi = ["templates/**/*"]

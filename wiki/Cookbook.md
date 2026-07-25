@@ -1,6 +1,6 @@
 # Cookbook
 
-Practical recipes for **auto-gen-py-project** v1.3.0.
+Practical recipes for **auto-gen-py-project** v1.3.1.
 
 ## FastAPI service with Docker
 
@@ -18,6 +18,19 @@ auto-gen-py-project new CoolLib -t pypi-package --no-git
 
 ```bash
 auto-gen-py-project new Shop --describe "Flask storefront with pytest"
+```
+
+## uv lockfile on scaffold
+
+```bash
+auto-gen-py-project new App -t library -m uv --lock --no-git
+```
+
+## Example FastAPI plugin template
+
+```bash
+pip install -e ./examples/auto-gen-py-project-fastapi
+auto-gen-py-project new Shop -t fastapi-extended --no-git
 ```
 
 ## Programmatic generation

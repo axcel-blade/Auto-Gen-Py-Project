@@ -74,6 +74,8 @@ class ProjectSpec(BaseModel):
     use_git: bool = True
     create_venv: bool = False
     install_deps: bool = False
+    # When True and package_manager is uv/poetry, run `uv lock` / `poetry lock` after scaffold
+    generate_lock: bool = False
     vscode: bool = True
     pycharm: bool = False
     extras: dict[str, Any] = Field(default_factory=dict)
@@ -133,5 +135,6 @@ class UserPreferences(BaseModel):
     use_git: bool = True
     create_venv: bool = False
     install_deps: bool = False
+    generate_lock: bool = False
     default_template: Optional[str] = "library"
     template_dirs: list[str] = Field(default_factory=list)

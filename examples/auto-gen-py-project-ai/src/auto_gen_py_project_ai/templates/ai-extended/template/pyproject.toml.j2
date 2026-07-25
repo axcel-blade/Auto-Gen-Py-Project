@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{ project_slug }}"
+version = "{{ version }}"
+description = "{{ description }}"
+readme = "README.md"
+requires-python = ">={{ python_version }}"
+authors = [{ name = "{{ author }}", email = "{{ email }}" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
+[project.scripts]
+{{ package_name }} = "{{ package_name }}.pipeline:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

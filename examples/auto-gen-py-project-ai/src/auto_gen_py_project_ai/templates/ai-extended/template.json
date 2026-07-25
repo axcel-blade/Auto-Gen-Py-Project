@@ -1,0 +1,8 @@
+{
+  "id": "ai-extended",
+  "name": "AI Extended",
+  "description": "Example extended AI template from auto-gen-py-project-ai",
+  "project_types": ["ai"],
+  "version": "1.0.0",
+  "tags": ["example", "plugin", "ai"]
+}
