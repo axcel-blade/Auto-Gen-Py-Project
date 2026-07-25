@@ -41,7 +41,7 @@ def test_cli_version():
     result = runner.invoke(app, ["version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.3.1" in out
+    assert "1.3.2" in out
     assert "Auto-Gen-Py-Project" in out
 
 
@@ -49,7 +49,7 @@ def test_cli_version_flag():
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.3.1" in out
+    assert "1.3.2" in out
     assert "Auto-Gen-Py-Project" in out
 
 
@@ -71,10 +71,39 @@ def test_cli_new(tmp_path: Path, monkeypatch):
     assert (tmp_path / "hello-world" / "pyproject.toml").exists()
 
 
+def test_cli_plain_init_creates_root_folder(tmp_path: Path, monkeypatch):
+    """Plain `init` creates ./my-project/ with a simple library scaffold."""
+    monkeypatch.chdir(tmp_path)
+    result = runner.invoke(app, ["init", "--force"])
+    assert result.exit_code == 0, _out(result)
+    root = tmp_path / "my-project"
+    assert root.is_dir()
+    assert (root / "pyproject.toml").exists()
+    assert (root / "src" / "my_project" / "__init__.py").exists()
+
+
+def test_cli_init_named_folder(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    result = runner.invoke(app, ["init", "--name", "cool-lib", "--force"])
+    assert result.exit_code == 0, _out(result)
+    root = tmp_path / "cool-lib"
+    assert (root / "pyproject.toml").exists(), _out(result)
+    assert (root / "src" / "cool_lib" / "__init__.py").exists()
+
+
+def test_cli_init_explicit_path_creates_folder(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    dest = tmp_path / "services" / "api"
+    result = runner.invoke(app, ["init", str(dest), "-n", "api", "-t", "library", "--force"])
+    assert result.exit_code == 0, _out(result)
+    assert dest.is_dir()
+    assert (dest / "pyproject.toml").exists()
+
+
 def test_cli_doctor():
     result = runner.invoke(app, ["doctor"])
     assert result.exit_code == 0
     out = _out(result)
     assert "Auto-Gen-Py-Project" in out
-    assert "1.3.1" in out
+    assert "1.3.2" in out
     assert "Windows, macOS, Linux" in out

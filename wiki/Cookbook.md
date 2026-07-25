@@ -1,6 +1,6 @@
 # Cookbook
 
-Practical recipes for **auto-gen-py-project** v1.3.1.
+Practical recipes for **auto-gen-py-project** v1.3.2.
 
 ## FastAPI service with Docker
 
@@ -8,10 +8,14 @@ Practical recipes for **auto-gen-py-project** v1.3.1.
 auto-gen-py-project new InventoryAPI -t fastapi --docker --path ./inventory-api
 ```
 
-## Library destined for PyPI
+## Plain init (creates root folder)
 
 ```bash
-auto-gen-py-project new CoolLib -t pypi-package --no-git
+auto-gen-py-project init
+# → ./my-project/
+
+auto-gen-py-project init --name CoolLib
+# → ./cool-lib/
 ```
 
 ## Template from a short description

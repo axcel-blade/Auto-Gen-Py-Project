@@ -2,6 +2,15 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.3.2
+
+### Changed
+
+- Plain ``init`` (no PATH) creates a new root folder (default ``./my-project/``) and scaffolds a simple library project inside
+- ``init PATH`` creates the folder if it is missing, then fills it
+- Docs / cookbook updated for the new ``init`` behavior
+- Version bump across package metadata and community docs
+
 ## 1.3.1
 
 ### Added
