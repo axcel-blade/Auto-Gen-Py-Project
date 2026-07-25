@@ -2,6 +2,23 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.3.1
+
+### Added
+
+- Optional lockfile generation for scaffolds: `--lock` with `-m uv` or `-m poetry` (`uv lock` / `poetry lock`)
+- Example plugin packages under `examples/`: `auto-gen-py-project-fastapi`, `-django`, `-ai`
+- CLI resolves plugin template ids (e.g. `fastapi-extended`) for `new` / `init`
+
+### Fixed
+
+- Template entry-point loader correctly handles callable `get_root()` helpers
+
+### Changed
+
+- Confirmed v1.3.0 on TestPyPI and PyPI; TODO updated
+- Version bump across package metadata and community docs
+
 ## 1.3.0
 
 ### Added

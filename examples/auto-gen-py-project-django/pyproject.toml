@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auto-gen-py-project-django"
+version = "0.1.0"
+description = "Example Django extended template plugin for auto-gen-py-project"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Axcel Blade" }]
+dependencies = ["auto-gen-py-project>=1.3.0"]
+
+[project.entry-points."auto_gen_py_project.plugins"]
+django = "auto_gen_py_project_django.plugin:Plugin"
+
+[project.entry-points."auto_gen_py_project.templates"]
+django_extended = "auto_gen_py_project_django.templates:get_root"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+auto_gen_py_project_django = ["templates/**/*"]

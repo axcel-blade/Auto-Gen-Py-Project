@@ -116,6 +116,7 @@ def _spec_from_prefs(
         use_git=prefs.use_git,
         create_venv=prefs.create_venv,
         install_deps=prefs.install_deps,
+        generate_lock=prefs.generate_lock,
     )
 
 
@@ -156,6 +157,13 @@ def _interactive_spec(prefs: UserPreferences, default_name: str = "MyProject") -
     except ValueError:
         package_manager = PackageManager.PIP
 
+    generate_lock = False
+    if package_manager in (PackageManager.UV, PackageManager.POETRY):
+        generate_lock = Confirm.ask(
+            f"Generate {package_manager.value} lockfile?",
+            default=prefs.generate_lock,
+        )
+
     use_docker = Confirm.ask("Include Docker?", default=prefs.use_docker)
     use_git = Confirm.ask("Initialize git?", default=prefs.use_git)
     create_venv = Confirm.ask("Create virtualenv?", default=prefs.create_venv)
@@ -173,6 +181,7 @@ def _interactive_spec(prefs: UserPreferences, default_name: str = "MyProject") -
         license=license_type,
         python_version=python_version,
         package_manager=package_manager,
+        generate_lock=generate_lock,
         use_docker=use_docker,
         use_compose=use_docker and Confirm.ask("Include docker-compose?", default=False),
         use_git=use_git,
@@ -188,11 +197,49 @@ def _interactive_spec(prefs: UserPreferences, default_name: str = "MyProject") -
     return spec, dest
 
 
-def _run_generate(spec: ProjectSpec, dest: Path, *, force: bool = False, prompt: str = "") -> None:
+def _resolve_template(template: str) -> tuple[ProjectType, str]:
+    """Return (project_type, template_id) for built-in or plugin templates."""
+    try:
+        return ProjectType(template), template
+    except ValueError:
+        pass
+    mgr = PluginManager()
+    mgr.load_entry_points()
+    registry = TemplateRegistry(mgr.extra_template_roots)
+    try:
+        found = registry.get(template)
+        if found.project_types:
+            try:
+                ptype = ProjectType(found.project_types[0])
+            except ValueError:
+                ptype = ProjectType.LIBRARY
+        else:
+            ptype = ProjectType.LIBRARY
+        return ptype, found.id
+    except Exception:  # noqa: BLE001
+        console.print(f"[yellow]Unknown template '{template}', using library[/]")
+        return ProjectType.LIBRARY, "library"
+
+
+def _run_generate(
+    spec: ProjectSpec,
+    dest: Path,
+    *,
+    force: bool = False,
+    prompt: str = "",
+    template_id: Optional[str] = None,
+) -> None:
     setup_logging()
     gen = ProjectGenerator()
-    path = gen.generate(spec, dest, force=force, apply_ai=bool(prompt), prompt=prompt)
-    console.print(f"[green]Project created at[/] {path}")
+    path = gen.generate(
+        spec,
+        dest,
+        force=force,
+        apply_ai=bool(prompt),
+        prompt=prompt,
+        template_id=template_id,
+    )
+    console.print(Panel(f"[green]Created[/] {path}", title=DISPLAY_NAME))
 
 
 @app.command("init")
@@ -200,6 +247,10 @@ def init_cmd(
     path: Path = typer.Argument(Path("."), help="Directory to initialize"),
     name: Optional[str] = typer.Option(None, "--name", "-n"),
     template: str = typer.Option("library", "--template", "-t"),
+    package_manager: Optional[str] = typer.Option(
+        None, "--package-manager", "-m", help="pip|uv|poetry|hatch|pdm"
+    ),
+    lock: bool = typer.Option(False, "--lock", help="Generate uv.lock or poetry.lock"),
     force: bool = typer.Option(False, "--force"),
     debug: bool = typer.Option(False, "--debug"),
 ) -> None:
@@ -207,13 +258,17 @@ def init_cmd(
     setup_logging(debug=debug)
     prefs = _prefs()
     project_name = name or path.resolve().name
-    try:
-        ptype = ProjectType(template)
-    except ValueError:
-        ptype = ProjectType.LIBRARY
+    ptype, template_id = _resolve_template(template)
     spec = _spec_from_prefs(project_name, project_type=ptype, prefs=prefs)
+    if package_manager:
+        try:
+            spec.package_manager = PackageManager(package_manager)
+        except ValueError:
+            console.print(f"[yellow]Unknown package manager '{package_manager}', using {spec.package_manager.value}[/]")
+    if lock:
+        spec.generate_lock = True
     try:
-        _run_generate(spec, path, force=force)
+        _run_generate(spec, path, force=force, template_id=template_id)
     except AutoGenError as exc:
         console.print(f"[red]{exc.message}[/]")
         raise typer.Exit(1) from exc
@@ -246,6 +301,10 @@ def new_cmd(
     template: str = typer.Option("library", "--template", "-t"),
     path: Optional[Path] = typer.Option(None, "--path", "-p"),
     description: Optional[str] = typer.Option(None, "--description", "-d"),
+    package_manager: Optional[str] = typer.Option(
+        None, "--package-manager", "-m", help="pip|uv|poetry|hatch|pdm"
+    ),
+    lock: bool = typer.Option(False, "--lock", help="Generate uv.lock or poetry.lock"),
     docker: bool = typer.Option(False, "--docker"),
     no_git: bool = typer.Option(False, "--no-git"),
     venv: bool = typer.Option(False, "--venv"),
@@ -263,21 +322,31 @@ def new_cmd(
     prefs = _prefs()
     try:
         ptype = ProjectType(template)
+        template_id = template
     except ValueError:
-        # Fall back to keyword-based template recommendation from --describe
         if ai_prompt:
             ptype = AIService().recommend_template(ai_prompt)
+            template_id = ptype.value
         else:
-            console.print(f"[yellow]Unknown template '{template}', using library[/]")
-            ptype = ProjectType.LIBRARY
+            ptype, template_id = _resolve_template(template)
     spec = _spec_from_prefs(name, project_type=ptype, prefs=prefs, description=description)
+    if package_manager:
+        try:
+            spec.package_manager = PackageManager(package_manager)
+        except ValueError:
+            console.print(
+                f"[yellow]Unknown package manager '{package_manager}', "
+                f"using {spec.package_manager.value}[/]"
+            )
+    if lock:
+        spec.generate_lock = True
     spec.use_docker = docker or prefs.use_docker
     spec.use_git = (not no_git) and prefs.use_git
     spec.create_venv = venv or prefs.create_venv
     spec.install_deps = install or prefs.install_deps
     dest = path or (Path.cwd() / ProjectSpec.normalize_package_name(name).replace("_", "-"))
     try:
-        _run_generate(spec, dest, force=force, prompt=ai_prompt or "")
+        _run_generate(spec, dest, force=force, prompt=ai_prompt or "", template_id=template_id)
     except AutoGenError as exc:
         console.print(f"[red]{exc.message}[/]")
         raise typer.Exit(1) from exc

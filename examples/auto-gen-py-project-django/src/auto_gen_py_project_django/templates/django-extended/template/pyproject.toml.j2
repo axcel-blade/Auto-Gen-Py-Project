@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{ project_slug }}"
+version = "{{ version }}"
+description = "{{ description }}"
+readme = "README.md"
+requires-python = ">={{ python_version }}"
+authors = [{ name = "{{ author }}", email = "{{ email }}" }]
+dependencies = ["django>=5.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0", "pytest-django>=4.8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -196,6 +196,33 @@ def write_ide_configs(dest: Path, spec: ProjectSpec) -> None:
         )
 
 
+def generate_lockfile(dest: Path, spec: ProjectSpec) -> None:
+    """Generate uv.lock or poetry.lock when requested and the tool is available."""
+    if not spec.generate_lock:
+        return
+    pm = spec.package_manager
+    try:
+        if pm == PackageManager.UV:
+            if not shutil.which("uv"):
+                logger.warning("uv not found; skipping lockfile generation")
+                return
+            subprocess.check_call(["uv", "lock"], cwd=dest)
+            logger.info("Generated uv.lock")
+        elif pm == PackageManager.POETRY:
+            if not shutil.which("poetry"):
+                logger.warning("poetry not found; skipping lockfile generation")
+                return
+            subprocess.check_call(["poetry", "lock"], cwd=dest)
+            logger.info("Generated poetry.lock")
+        else:
+            logger.warning(
+                "Lockfile generation is only supported for uv and poetry (got %s)",
+                pm.value,
+            )
+    except subprocess.CalledProcessError as exc:
+        logger.warning("Lockfile generation failed: %s", exc)
+
+
 def apply_integrations(dest: Path, spec: ProjectSpec) -> None:
     write_docker_files(dest, spec)
     write_github_actions(dest, spec)
@@ -204,6 +231,8 @@ def apply_integrations(dest: Path, spec: ProjectSpec) -> None:
     venv_path = None
     if spec.create_venv:
         venv_path = create_virtualenv(dest)
+    # Lock before install so sync/install can consume a fresh lockfile
+    generate_lockfile(dest, spec)
     if spec.install_deps:
         install_dependencies(dest, spec, venv_path)
     if spec.use_git:
