@@ -48,6 +48,36 @@ app.add_typer(plugin_app, name="plugin")
 console = get_console()
 
 
+def _print_version() -> None:
+    """Print the installed package version (plain + panel)."""
+    # Plain line first so shells / scripts can parse easily
+    console.print(f"auto-gen-py-project {__version__}")
+    console.print(Panel(f"[bold cyan]{__version__}[/]", title="auto-gen-py-project"))
+
+
+def _version_option(value: bool) -> None:
+    """Eager ``--version`` / ``-V`` handler."""
+    if value:
+        _print_version()
+        raise typer.Exit()
+
+
+@app.callback()
+def _root(
+    version: bool = typer.Option(
+        False,
+        "--version",
+        "-V",
+        help="Show version and exit.",
+        callback=_version_option,
+        is_eager=True,
+    ),
+) -> None:
+    """Generate production-ready Python projects from templates."""
+    # Callback exists so --version works on the root command.
+    _ = version
+
+
 def _prefs() -> UserPreferences:
     prefs, _ = load_preferences()
     return prefs
@@ -313,6 +343,8 @@ def doctor_cmd() -> None:
     table.add_row("auto-gen-py-project", __version__)
     table.add_row("python", sys.version.split()[0])
     table.add_row("platform", sys.platform)
+    cli_path = shutil.which("auto-gen-py-project")
+    table.add_row("cli on PATH", cli_path or "[red]not found[/]")
     for tool in ("git", "docker", "uv", "poetry", "pdm", "hatch"):
         table.add_row(tool, shutil.which(tool) or "[dim]not found[/]")
     prefs, path = load_preferences()
@@ -323,6 +355,38 @@ def doctor_cmd() -> None:
     table.add_row("plugins", str(len(plugins.plugins)))
     table.add_row("templates", str(len(TemplateRegistry(plugins.extra_template_roots).list())))
     console.print(table)
+    # Windows user installs often put the .exe outside PATH
+    if not cli_path:
+        import sysconfig
+
+        candidates: list[Path] = []
+        for scheme in (None, "nt_user", "posix_user"):
+            try:
+                raw = (
+                    sysconfig.get_path("scripts")
+                    if scheme is None
+                    else sysconfig.get_path("scripts", scheme=scheme)
+                )
+            except Exception:  # noqa: BLE001
+                continue
+            if raw:
+                p = Path(raw)
+                if p not in candidates:
+                    candidates.append(p)
+        lines = "\n".join(f"  {p}" for p in candidates) or "  (see python -m site)"
+        tip = candidates[-1] if candidates else Path("Scripts")
+        console.print(
+            Panel(
+                f"[yellow]Command `auto-gen-py-project` is not on PATH.[/]\n\n"
+                f"Use: [bold]python -m auto_gen_py_project version[/]\n\n"
+                f"Or add a Scripts folder to PATH, then open a new terminal:\n"
+                f"{lines}\n\n"
+                f"PowerShell (user PATH):\n"
+                f"  [Environment]::SetEnvironmentVariable(\n"
+                f"    'Path', $env:Path + ';{tip}', 'User')",
+                title="PATH fix",
+            )
+        )
 
 
 @app.command("update")
@@ -332,13 +396,20 @@ def update_cmd() -> None:
     code = subprocess.call(
         [sys.executable, "-m", "pip", "install", "--upgrade", "auto-gen-py-project"]
     )
+    if code == 0:
+        console.print(f"[green]Updated.[/] Check with: python -m auto_gen_py_project version")
+        if not shutil.which("auto-gen-py-project"):
+            console.print(
+                "[dim]Tip: if `auto-gen-py-project` is not found, use "
+                "`python -m auto_gen_py_project …` or run `doctor` for PATH help.[/]"
+            )
     raise typer.Exit(code)
 
 
 @app.command("version")
 def version_cmd() -> None:
-    """Show version."""
-    console.print(Panel(f"auto-gen-py-project [bold cyan]{__version__}[/]", title="version"))
+    """Show installed package version (`auto-gen-py-project version`)."""
+    _print_version()
 
 
 @app.command("config")

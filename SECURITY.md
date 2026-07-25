@@ -16,7 +16,7 @@ Do **not** open a public issue for security-sensitive reports until a fix is ava
 
 Include:
 
-- Affected version (for example `1.2.5`)
+- Affected version (for example `1.2.6`)
 - Reproduction steps
 - Impact assessment
 
