@@ -41,7 +41,7 @@ def test_cli_version():
     result = runner.invoke(app, ["version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.3.4" in out
+    assert "1.3.5" in out
     assert "Auto-Gen-Py-Project" in out
 
 
@@ -49,7 +49,7 @@ def test_cli_version_flag():
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.3.4" in out
+    assert "1.3.5" in out
     assert "Auto-Gen-Py-Project" in out
 
 
@@ -137,5 +137,5 @@ def test_cli_flag_doctor():
     assert result.exit_code == 0
     out = _out(result)
     assert "Auto-Gen-Py-Project" in out
-    assert "1.3.4" in out
+    assert "1.3.5" in out
     assert "Windows, macOS, Linux" in out

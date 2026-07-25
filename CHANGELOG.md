@@ -2,6 +2,14 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.3.5
+
+### Changed
+
+- Scaffolds write ``LICENSE.md`` (not bare ``LICENSE``), matching this repository
+- Generated README license section links to ``LICENSE.md``
+- Version bump across package metadata and community docs
+
 ## 1.3.4
 
 ### Added

@@ -1,6 +1,6 @@
 # User guide
 
-**auto-gen-py-project** v1.3.4 generates production-ready Python projects from templates on **Windows, macOS, and Linux** (Python 3.12+).
+**auto-gen-py-project** v1.3.5 generates production-ready Python projects from templates on **Windows, macOS, and Linux** (Python 3.12+).
 
 ## Install
 
@@ -47,7 +47,7 @@ auto_gen_py_project init ./service --name payments --template library
 
 ## What gets generated
 
-- `pyproject.toml`, `README.md`, `LICENSE`, `.gitignore`, `.editorconfig`
+- `pyproject.toml`, `README.md`, `LICENSE.md`, `.gitignore`, `.editorconfig`
 - `src/<package>/`, `tests/`, `docs/`, `examples/`, `scripts/`, `assets/`
 - Optional: Docker, docker-compose, GitHub Actions, pre-commit, VS Code settings
 - Optional: git init, virtualenv, dependency install

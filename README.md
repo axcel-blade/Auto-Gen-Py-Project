@@ -3,7 +3,7 @@
 Python project generator — scaffolds production-ready repos from templates, with plugins, an interactive wizard, and optional tooling (Docker, GitHub Actions, pre-commit, venv).
 
 [![CI](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/badge/version-1.3.4-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
+[![PyPI version](https://img.shields.io/badge/version-1.3.5-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
@@ -96,7 +96,7 @@ Also available as: `python -m auto_gen_py_project …`
 | `install-template` | Install a template plugin (or local sample) |
 | `doctor` | Environment diagnostics |
 | `update` | Upgrade from PyPI |
-| `version` | Show version (`1.3.4`) |
+| `version` | Show version (`1.3.5`) |
 | `config` | Show / write user defaults |
 | `plugin list\|install\|remove` | Plugin management |
 

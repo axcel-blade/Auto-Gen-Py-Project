@@ -14,8 +14,11 @@ def test_builtin_scaffold_library(tmp_path: Path):
     spec = ProjectSpec(name="Lib", package_name="lib_demo", project_type=ProjectType.LIBRARY)
     files = BuiltinScaffold().generate(tmp_path, spec)
     assert (tmp_path / "pyproject.toml").exists()
+    assert (tmp_path / "LICENSE.md").exists()
+    assert not (tmp_path / "LICENSE").exists()
     assert (tmp_path / "src" / "lib_demo" / "core.py").exists()
     assert (tmp_path / "tests" / "test_version.py").exists()
+    assert any(p.name == "LICENSE.md" for p in files)
     assert files
 
 

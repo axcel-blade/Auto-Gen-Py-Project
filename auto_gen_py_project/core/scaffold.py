@@ -151,7 +151,7 @@ ruff check src tests
 
 ## License
 
-{{ license }}
+{{ license }} — see [LICENSE.md](LICENSE.md).
 """,
             ctx,
         )
@@ -233,7 +233,8 @@ print("{{ name }} scripts")
         files = {
             "pyproject.toml": pyproject,
             "README.md": readme,
-            "LICENSE": license_text,
+            # Match this repo: keep license terms in LICENSE.md only (no bare LICENSE).
+            "LICENSE.md": license_text,
             ".gitignore": gitignore,
             ".editorconfig": editorconfig,
             "requirements.txt": req_text,
