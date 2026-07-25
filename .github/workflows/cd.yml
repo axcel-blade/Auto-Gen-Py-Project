@@ -2,17 +2,13 @@ name: CD
 
 # Continuous Deployment
 # - test + build on push to main
-# - on GitHub Release: publish ONLY to TestPyPI (account: axcelblade)
+# - on GitHub Release: publish to TestPyPI then production PyPI
 #
-# Auth (one of):
-#   A) Repo secret TEST_PYPI_API_TOKEN  (recommended right now)
-#   B) Trusted Publisher on test.pypi.org matching:
-#        Owner: axcel-blade
-#        Repo: Auto-Gen-Py-Project
-#        Workflow: cd.yml
-#        Environment: test-pypi
+# Secrets (never commit tokens; Twine username is __token__):
+#   TEST_PYPI_API_TOKEN — TestPyPI (optional if Trusted Publisher configured)
+#   PYPI_API_TOKEN      — production PyPI (optional if Trusted Publisher configured)
 #
-# Never commit tokens. Twine username with API tokens is __token__.
+# Environments: test-pypi, pypi
 
 on:
   push:
@@ -53,13 +49,12 @@ jobs:
           name: dist-${{ github.sha }}
           path: dist/
 
-  # TestPyPI only — no production PyPI deploy.
+  # TestPyPI first (skip-existing so re-runs are safe)
   deploy-test-pypi:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'published'
     runs-on: ubuntu-latest
     permissions:
-      # Required so OIDC works when TEST_PYPI_API_TOKEN is unset
       id-token: write
       contents: read
     environment:
@@ -70,20 +65,33 @@ jobs:
         with:
           name: dist-${{ github.sha }}
           path: dist/
-      - name: Require TestPyPI credentials
-        env:
-          TEST_PYPI_API_TOKEN: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        run: |
-          if [ -z "${TEST_PYPI_API_TOKEN}" ]; then
-            echo "::error::Missing secret TEST_PYPI_API_TOKEN. Add it under Settings → Secrets, or configure a Trusted Publisher on test.pypi.org for environment 'test-pypi'."
-            # Continue: OIDC may still work if Trusted Publisher is configured
-          else
-            echo "Using TEST_PYPI_API_TOKEN for TestPyPI upload"
-          fi
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          skip-existing: true
+          verbose: true
+
+  # Production PyPI (after TestPyPI)
+  deploy-pypi:
+    needs: [build, deploy-test-pypi]
+    if: github.event_name == 'release' && github.event.action == 'published'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment:
+      name: pypi
+      url: https://pypi.org/project/auto-gen-py-project/
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
           skip-existing: true
           verbose: true
