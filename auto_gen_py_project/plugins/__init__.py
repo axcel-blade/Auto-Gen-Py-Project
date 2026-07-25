@@ -102,9 +102,12 @@ class PluginManager:
         for ep in eps:
             try:
                 obj = ep.load()
-                path = Path(obj) if not isinstance(obj, Path) else obj
-                if callable(obj) and not isinstance(obj, Path):
+                if callable(obj) and not isinstance(obj, type):
                     path = Path(obj())
+                elif isinstance(obj, Path):
+                    path = obj
+                else:
+                    path = Path(obj)
                 if path.is_dir():
                     self.register_template_root(path)
             except Exception as exc:  # noqa: BLE001

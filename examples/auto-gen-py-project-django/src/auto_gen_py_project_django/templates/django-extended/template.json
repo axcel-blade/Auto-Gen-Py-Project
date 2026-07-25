@@ -1,0 +1,8 @@
+{
+  "id": "django-extended",
+  "name": "Django Extended",
+  "description": "Example extended Django template from auto-gen-py-project-django",
+  "project_types": ["django"],
+  "version": "1.0.0",
+  "tags": ["example", "plugin", "django"]
+}

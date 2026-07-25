@@ -1,0 +1,20 @@
+"""{{ name }} — FastAPI application entrypoint."""
+
+from fastapi import FastAPI
+
+app = FastAPI(title="{{ name }}", version="{{ version }}")
+
+
+@app.get("/health")
+def health() -> dict[str, str]:
+    return {"status": "ok", "service": "{{ package_name }}"}
+
+
+def main() -> None:
+    import uvicorn
+
+    uvicorn.run("{{ package_name }}.main:app", host="0.0.0.0", port=8000, reload=True)
+
+
+if __name__ == "__main__":
+    main()

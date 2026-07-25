@@ -22,7 +22,7 @@ python -m auto_gen_py_project doctor
 
 **Windows, macOS, and Linux.** The same CLI works on all three. CI runs tests on Ubuntu, Windows, and macOS with Python 3.12 and 3.13.
 
-Current docs target **1.3.0**.
+Current docs target **1.3.1**.
 
 ## Does generation require an API key?
 

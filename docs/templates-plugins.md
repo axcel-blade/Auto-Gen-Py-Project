@@ -1,6 +1,6 @@
 # Templates and plugins
 
-Applies to **auto-gen-py-project** v1.3.0.
+Applies to **auto-gen-py-project** v1.3.1.
 
 ## Built-in templates
 
@@ -47,3 +47,12 @@ class MyPlugin(Plugin):
 ```
 
 Entry point group: `auto_gen_py_project.plugins`.
+
+## Example plugins (in-repo)
+
+See [`examples/README.md`](../examples/README.md):
+
+```bash
+pip install -e ./examples/auto-gen-py-project-fastapi
+auto-gen-py-project new Demo -t fastapi-extended
+```

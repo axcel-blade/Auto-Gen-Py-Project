@@ -1,0 +1,8 @@
+{
+  "id": "fastapi-extended",
+  "name": "FastAPI Extended",
+  "description": "Example extended FastAPI template from auto-gen-py-project-fastapi",
+  "project_types": ["fastapi"],
+  "version": "1.0.0",
+  "tags": ["example", "plugin", "fastapi"]
+}

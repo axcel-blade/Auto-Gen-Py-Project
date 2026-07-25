@@ -1,0 +1,17 @@
+"""Simple offline pipeline stub for {{ name }}."""
+
+from __future__ import annotations
+
+
+def run(prompt: str) -> str:
+    """Return a deterministic stub response (no external API calls)."""
+    text = (prompt or "").strip() or "hello"
+    return f"[{{ package_name }}] processed: {text[:200]}"
+
+
+def main() -> None:
+    print(run("demo"))
+
+
+if __name__ == "__main__":
+    main()
