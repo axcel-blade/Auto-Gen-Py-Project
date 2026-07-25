@@ -3,8 +3,9 @@
 Python project generator — scaffolds production-ready repos from templates, with plugins, an interactive wizard, and optional tooling (Docker, GitHub Actions, pre-commit, venv).
 
 [![CI](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/badge/version-1.2.9-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
+[![PyPI version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
 ## Install
@@ -27,13 +28,23 @@ auto-gen-py-project version
 auto-gen-py-project --version
 ```
 
-If PowerShell says the command is not recognized, the Scripts folder is not on `PATH`. Use:
+If the `auto-gen-py-project` command is not recognized, the scripts folder is not on `PATH` (can happen on Windows, macOS, or Linux). Use:
 
 ```bash
 python -m auto_gen_py_project version
 ```
 
-Then run `python -m auto_gen_py_project doctor` for PATH fix instructions (common on Windows user installs).
+Then run `python -m auto_gen_py_project doctor` for OS-specific PATH fix instructions.
+
+## Supported platforms
+
+| OS | Support | Notes |
+|----|---------|--------|
+| **Windows** | Yes | PowerShell / CMD; use `python -m …` if Scripts is not on PATH |
+| **macOS** | Yes | Terminal / zsh; same CLI and templates |
+| **Linux** | Yes | Ubuntu and other distros; CI runs on Ubuntu |
+
+Requires **Python 3.12+**. CI tests all three OSes on Python 3.12 and 3.13.
 
 ## Quick start
 
@@ -58,7 +69,7 @@ Also available as: `python -m auto_gen_py_project …`
 | `install-template` | Install a template plugin (or local sample) |
 | `doctor` | Environment diagnostics |
 | `update` | Upgrade from PyPI |
-| `version` | Show version (`1.2.9`) |
+| `version` | Show version (`1.3.0`) |
 | `config` | Show / write user defaults |
 | `plugin list\|install\|remove` | Plugin management |
 

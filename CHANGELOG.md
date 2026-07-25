@@ -2,6 +2,19 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.3.0
+
+### Added
+
+- Declared **Windows, macOS, and Linux** support in PyPI classifiers, README, FAQ, and `doctor`
+- Platform badge and supported-platforms table in README
+- OS-specific PATH fix hints in `doctor` (PowerShell on Windows; `export PATH=…` on macOS/Linux)
+
+### Changed
+
+- CI already matrix-tests Ubuntu, Windows, and macOS (Python 3.12 / 3.13) — documented as supported platforms
+- Version bump across package metadata and community docs
+
 ## 1.2.9
 
 ### Fixed
@@ -23,7 +36,7 @@ All notable changes to **auto-gen-py-project** are documented here.
 
 ### Changed
 
-- Package metadata author set to **Axcel Blade** (was “auto-gen-py-project contributors”)
+- Package metadata author set to **Axcel Blade** (was ΓÇ£auto-gen-py-project contributorsΓÇ¥)
 - Version bump across package metadata and community docs
 
 ## 1.2.6
@@ -54,7 +67,7 @@ All notable changes to **auto-gen-py-project** are documented here.
 
 ### Changed
 
-- Dropped “AI-ready” marketing from README and docs; packaging is a template scaffolder only
+- Dropped ΓÇ£AI-readyΓÇ¥ marketing from README and docs; packaging is a template scaffolder only
 - Renamed CLI flag `--ai` to `--describe` for keyword-based template hints (no LLM / network)
 - Clarified FAQ, API, Cookbook, and ROADMAP that hints are offline heuristics
 - Version bump across package metadata and community docs

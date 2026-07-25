@@ -11,14 +11,18 @@ auto-gen-py-project version
 auto-gen-py-project --version
 ```
 
-If the command is not found (common on Windows when Scripts is not on `PATH`):
+If the command is not found (scripts folder not on `PATH` — Windows, macOS, or Linux):
 
 ```bash
 python -m auto_gen_py_project version
 python -m auto_gen_py_project doctor
 ```
 
-Current docs target **1.2.9**.
+## Which operating systems are supported?
+
+**Windows, macOS, and Linux.** The same CLI works on all three. CI runs tests on Ubuntu, Windows, and macOS with Python 3.12 and 3.13.
+
+Current docs target **1.3.0**.
 
 ## Does generation require an API key?
 
