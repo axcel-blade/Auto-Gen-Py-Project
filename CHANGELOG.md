@@ -2,6 +2,13 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.8
+
+### Changed
+
+- Version / doctor / wizard UI title shows **Auto-Gen-Py-Project** (CLI command name unchanged)
+- Version bump across package metadata and community docs
+
 ## 1.2.7
 
 ### Changed
