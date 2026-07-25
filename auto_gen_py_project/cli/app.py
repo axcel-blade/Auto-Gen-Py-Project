@@ -36,9 +36,11 @@ from auto_gen_py_project.templates import TemplateRegistry
 from auto_gen_py_project.utilities import ensure_dir
 
 app = typer.Typer(
-    name="auto-gen-py-project",
+    name="auto_gen_py_project",
     help="Generate production-ready Python projects from templates.",
-    no_args_is_help=True,
+    # Flag-style actions (--init, --doctor, …) run without a subcommand.
+    invoke_without_command=True,
+    no_args_is_help=False,
     add_completion=False,
     rich_markup_mode="rich",
 )
@@ -48,13 +50,12 @@ app.add_typer(plugin_app, name="plugin")
 console = get_console()
 
 
-# Display name shown in version / UI (CLI entry point remains auto-gen-py-project)
+# Display name shown in version / UI
 DISPLAY_NAME = "Auto-Gen-Py-Project"
 
 
 def _print_version() -> None:
     """Print the installed package version (plain + panel)."""
-    # Plain line first so shells / scripts can parse easily
     console.print(f"{DISPLAY_NAME} {__version__}")
     console.print(Panel(f"[bold cyan]{__version__}[/]", title=DISPLAY_NAME))
 
@@ -66,8 +67,40 @@ def _version_option(value: bool) -> None:
         raise typer.Exit()
 
 
-@app.callback()
+def _scaffold_into_folder(
+    dest: Path,
+    *,
+    name: Optional[str],
+    template: str,
+    package_manager: Optional[str],
+    lock: bool,
+    force: bool,
+    debug: bool,
+) -> None:
+    """Write a simple project scaffold into ``dest`` (creates folder if needed)."""
+    setup_logging(debug=debug)
+    prefs = _prefs()
+    dest = dest.expanduser().resolve()
+    dest.mkdir(parents=True, exist_ok=True)
+    project_name = name or dest.name or "my-project"
+    ptype, template_id = _resolve_template(template)
+    spec = _spec_from_prefs(project_name, project_type=ptype, prefs=prefs)
+    if package_manager:
+        try:
+            spec.package_manager = PackageManager(package_manager)
+        except ValueError:
+            console.print(
+                f"[yellow]Unknown package manager '{package_manager}', "
+                f"using {spec.package_manager.value}[/]"
+            )
+    if lock:
+        spec.generate_lock = True
+    _run_generate(spec, dest, force=force, template_id=template_id)
+
+
+@app.callback(invoke_without_command=True)
 def _root(
+    ctx: typer.Context,
     version: bool = typer.Option(
         False,
         "--version",
@@ -76,10 +109,101 @@ def _root(
         callback=_version_option,
         is_eager=True,
     ),
+    init: bool = typer.Option(
+        False,
+        "--init",
+        help="Create a simple Python project structure in the target folder (default: current directory).",
+    ),
+    create: bool = typer.Option(
+        False,
+        "--create",
+        help="Interactive project creation wizard.",
+    ),
+    doctor: bool = typer.Option(
+        False,
+        "--doctor",
+        help="Diagnose environment health.",
+    ),
+    list_templates: bool = typer.Option(
+        False,
+        "--list-templates",
+        help="List available templates / project types.",
+    ),
+    path: Optional[str] = typer.Option(
+        None,
+        "--path",
+        "-p",
+        help="Target folder for --init (default: .).",
+    ),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Project name for --init."),
+    template: str = typer.Option("library", "--template", "-t", help="Template for --init."),
+    package_manager: Optional[str] = typer.Option(
+        None, "--package-manager", "-m", help="pip|uv|poetry|hatch|pdm (with --init)"
+    ),
+    lock: bool = typer.Option(False, "--lock", help="Generate uv/poetry lockfile (with --init)"),
+    force: bool = typer.Option(False, "--force", help="Allow non-empty destination (with --init)"),
+    debug: bool = typer.Option(False, "--debug"),
 ) -> None:
-    """Generate production-ready Python projects from templates."""
-    # Callback exists so --version works on the root command.
-    _ = version
+    """Generate production-ready Python projects from templates.
+
+    Flag style (works on Windows, macOS, Linux)::
+
+        auto_gen_py_project --init
+        auto_gen_py_project --init --path ./myapp --force
+        auto_gen_py_project --version
+        auto_gen_py_project --doctor
+        auto_gen_py_project --list-templates
+        auto_gen_py_project --create
+
+    Subcommands (``init``, ``new``, ``create``, …) still work.
+    """
+    if ctx.invoked_subcommand is not None:
+        return
+
+    selected = [init, create, doctor, list_templates]
+    if sum(1 for flag in selected if flag) > 1:
+        console.print(
+            "[red]Use only one of --init, --create, --doctor, --list-templates[/]"
+        )
+        raise typer.Exit(1)
+
+    if init:
+        dest = Path(path) if path else Path.cwd()
+        try:
+            _scaffold_into_folder(
+                dest,
+                name=name,
+                template=template,
+                package_manager=package_manager,
+                lock=lock,
+                force=force,
+                debug=debug,
+            )
+        except AutoGenError as exc:
+            console.print(f"[red]{exc.message}[/]")
+            if "not empty" in exc.message.lower():
+                console.print(
+                    "[dim]Tip: add --force to write into a folder that already has files.[/]"
+                )
+            raise typer.Exit(1) from exc
+        raise typer.Exit(0)
+
+    if create:
+        create_cmd(debug=debug)
+        raise typer.Exit(0)
+
+    if doctor:
+        doctor_cmd()
+        raise typer.Exit(0)
+
+    if list_templates:
+        # Imported lazily via command function below in module
+        list_templates_cmd()
+        raise typer.Exit(0)
+
+    # No flag and no subcommand → show help
+    typer.echo(ctx.get_help())
+    raise typer.Exit(0)
 
 
 def _prefs() -> UserPreferences:
@@ -270,47 +394,32 @@ def init_cmd(
     """Create a simple Python project, including the root folder when needed.
 
     Plain ``init`` (no PATH) creates ``./<name>/`` with a library scaffold inside.
-    With a PATH, that directory is created if missing and filled with the project.
+    With a PATH (or flag ``--init``), that directory is created if missing and filled.
+
+    Prefer the cross-platform flag form::
+
+        auto_gen_py_project --init
+        auto_gen_py_project --init --path . --force
     """
-    setup_logging(debug=debug)
-    prefs = _prefs()
-
-    # Use str (not Path) for the optional argument so Typer does not coerce
-    # a missing value into Path(".") / the current working directory.
     path_arg = (path or "").strip()
-
-    # Plain `init`: create a new root folder under cwd, then scaffold inside it.
     if not path_arg:
         project_name = name or "my-project"
         folder = ProjectSpec.normalize_package_name(project_name).replace("_", "-")
         dest = Path.cwd() / folder
+        name = project_name
     else:
         dest = Path(path_arg)
-        if name:
-            project_name = name
-        elif path_arg in (".",):
-            project_name = Path.cwd().resolve().name
-        else:
-            project_name = dest.name or "my-project"
 
-    # Ensure the project root folder exists before generation.
-    dest = dest.resolve()
-    dest.mkdir(parents=True, exist_ok=True)
-
-    ptype, template_id = _resolve_template(template)
-    spec = _spec_from_prefs(project_name, project_type=ptype, prefs=prefs)
-    if package_manager:
-        try:
-            spec.package_manager = PackageManager(package_manager)
-        except ValueError:
-            console.print(
-                f"[yellow]Unknown package manager '{package_manager}', "
-                f"using {spec.package_manager.value}[/]"
-            )
-    if lock:
-        spec.generate_lock = True
     try:
-        _run_generate(spec, dest, force=force, template_id=template_id)
+        _scaffold_into_folder(
+            dest,
+            name=name,
+            template=template,
+            package_manager=package_manager,
+            lock=lock,
+            force=force,
+            debug=debug,
+        )
     except AutoGenError as exc:
         console.print(f"[red]{exc.message}[/]")
         raise typer.Exit(1) from exc
@@ -465,7 +574,7 @@ def doctor_cmd() -> None:
         f"{platform.system()} {platform.release()} ({sys.platform})",
     )
     table.add_row("supported platforms", "Windows, macOS, Linux")
-    cli_path = shutil.which("auto-gen-py-project")
+    cli_path = shutil.which("auto_gen_py_project") or shutil.which("auto-gen-py-project")
     table.add_row("cli on PATH", cli_path or "[red]not found[/]")
     for tool in ("git", "docker", "uv", "poetry", "pdm", "hatch"):
         table.add_row(tool, shutil.which(tool) or "[dim]not found[/]")
@@ -508,9 +617,9 @@ def doctor_cmd() -> None:
             )
         console.print(
             Panel(
-                f"[yellow]Command `auto-gen-py-project` is not on PATH.[/]\n\n"
+                f"[yellow]Command `auto_gen_py_project` / `auto-gen-py-project` is not on PATH.[/]\n\n"
                 f"Works on Windows, macOS, and Linux.\n"
-                f"Use: [bold]python -m auto_gen_py_project version[/]\n\n"
+                f"Use: [bold]python -m auto_gen_py_project --version[/]\n\n"
                 f"Or add a scripts folder to PATH:\n"
                 f"{lines}\n\n"
                 f"{path_help}",

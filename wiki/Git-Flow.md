@@ -15,7 +15,7 @@ develop
 1. **feature/\*** — branch from `develop`, PR back to `develop`
 2. **release/x.y.z** — branch from `develop` when stabilizing a release; bump version/docs; merge to `main` and `develop`
 3. **hotfix/\*** — branch from `main` for urgent fixes; merge to `main` and `develop`
-4. Tag releases on `main` (for example `v1.3.3`)
+4. Tag releases on `main` (for example `v1.3.4`)
 
 ## Version bump checklist
 
