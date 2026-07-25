@@ -1,10 +1,11 @@
 # TODO
 
-Task tracking for **auto-gen-py-project** v1.2.4+.
+Task tracking for **auto-gen-py-project** v1.2.5+.
 
 ## Near term
 
-- [ ] Publish v1.2.4 to TestPyPI via CD (`TEST_PYPI_API_TOKEN` / Trusted Publisher)
+- [ ] Confirm v1.2.5 on TestPyPI and PyPI via CD (`TEST_PYPI_API_TOKEN` / `PYPI_API_TOKEN`)
+- [x] Enable production PyPI deploy in CD
 - [ ] Add end-to-end snapshot tests for each built-in project type
 - [ ] Document custom template authoring with more examples
 - [ ] Add `uv`/`poetry` lockfile generation options for scaffolds

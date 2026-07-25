@@ -1,42 +1,50 @@
-# Publishing (TestPyPI only)
+# Publishing (TestPyPI + PyPI)
 
-Applies to package **auto-gen-py-project** v1.2.4+.
+Applies to package **auto-gen-py-project** v1.2.5+.
 
-This project’s CD workflow publishes **only to TestPyPI** on GitHub Releases.
+On each GitHub Release, CD publishes to **TestPyPI**, then **production PyPI**.
 
-## Account
+## Accounts
 
 | Site | Username | Package |
 |------|----------|---------|
 | [TestPyPI](https://test.pypi.org/) | `axcelblade` | `auto-gen-py-project` |
+| [PyPI](https://pypi.org/) | `axcelblade` | `auto-gen-py-project` |
 
-## Fix: `ACTIONS_ID_TOKEN_REQUEST_TOKEN was unset`
+## GitHub secrets
 
-The publish job must request an OIDC token when using Trusted Publishing:
+| Secret | Where |
+|--------|--------|
+| `TEST_PYPI_API_TOKEN` | TestPyPI API token |
+| `PYPI_API_TOKEN` | Production PyPI API token |
 
-```yaml
-permissions:
-  id-token: write
-  contents: read
-```
+Create tokens at:
 
-That is set on the `deploy-test-pypi` job in `.github/workflows/cd.yml`.
+- https://test.pypi.org/manage/account/token/
+- https://pypi.org/manage/account/token/
 
-## Recommended: API token secret
+Then: GitHub → **Settings → Secrets and variables → Actions**
 
-1. Log into TestPyPI as **`axcelblade`**
-2. Create a token at https://test.pypi.org/manage/account/token/
-3. GitHub → **Settings → Secrets and variables → Actions**
-   - Name: `TEST_PYPI_API_TOKEN`
-   - Value: the new token (**never** paste tokens in chat/issues)
-4. Create Environment **`test-pypi`** (Settings → Environments)
-5. Re-run the CD workflow for the release (or publish a new patch release so the updated workflow is on the tag)
+Twine / `pypa/gh-action-pypi-publish` use username **`__token__`** with the secret as the password.
 
-Twine / the publish action use username **`__token__`** with that secret as the password.
+**Never** commit tokens or paste them in issues/chat. Revoke any token that was exposed.
 
-## Alternative: Trusted Publisher (OIDC)
+## Environments
 
-On https://test.pypi.org/manage/account/publishing/ (as `axcelblade`), add:
+Create Environments (Settings → Environments):
+
+| Environment | Purpose |
+|-------------|---------|
+| `test-pypi` | TestPyPI deploy job |
+| `pypi` | Production PyPI deploy job |
+
+Both jobs request `id-token: write` so Trusted Publishing (OIDC) can work when the matching API token secret is unset.
+
+## Trusted Publisher (OIDC) — optional
+
+### TestPyPI
+
+https://test.pypi.org/manage/account/publishing/
 
 | Field | Value |
 |-------|--------|
@@ -46,10 +54,20 @@ On https://test.pypi.org/manage/account/publishing/ (as `axcelblade`), add:
 | Environment | `test-pypi` |
 | Project name | `auto-gen-py-project` |
 
-Then you can omit `TEST_PYPI_API_TOKEN` (OIDC will be used).
+### PyPI
+
+https://pypi.org/manage/account/publishing/
+
+| Field | Value |
+|-------|--------|
+| Owner | `axcel-blade` |
+| Repository | `Auto-Gen-Py-Project` |
+| Workflow filename | `cd.yml` |
+| Environment | `pypi` |
+| Project name | `auto-gen-py-project` |
 
 ## Security
 
 - Never commit or paste API tokens.
 - Revoke any token that was exposed in chat or logs.
-- Production PyPI deploy is **disabled** in CD by design.
+- Prefer short-lived tokens scoped to project `auto-gen-py-project`.

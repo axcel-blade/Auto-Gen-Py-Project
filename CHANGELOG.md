@@ -2,6 +2,17 @@
 
 All notable changes to **auto-gen-py-project** are documented here.
 
+## 1.2.5
+
+### Added
+
+- CD publishes to **production PyPI** after TestPyPI on each GitHub Release (`PYPI_API_TOKEN` / Trusted Publisher)
+
+### Changed
+
+- Documented dual TestPyPI + PyPI publishing in `docs/publishing.md`
+- Version bump across package metadata and community docs
+
 ## 1.2.4
 
 ### Changed
