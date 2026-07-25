@@ -8,9 +8,17 @@ A CLI that scaffolds production-ready Python projects (library, CLI, FastAPI, Dj
 
 ```bash
 auto-gen-py-project version
+auto-gen-py-project --version
 ```
 
-Current docs target **1.2.5**.
+If the command is not found (common on Windows when Scripts is not on `PATH`):
+
+```bash
+python -m auto_gen_py_project version
+python -m auto_gen_py_project doctor
+```
+
+Current docs target **1.2.6**.
 
 ## Does generation require an API key?
 

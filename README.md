@@ -3,14 +3,14 @@
 Python project generator — scaffolds production-ready repos from templates, with plugins, an interactive wizard, and optional tooling (Docker, GitHub Actions, pre-commit, venv).
 
 [![CI](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/axcel-blade/Auto-Gen-Py-Project/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/badge/version-1.2.5-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
+[![PyPI version](https://img.shields.io/badge/version-1.2.6-blue.svg)](https://pypi.org/project/auto-gen-py-project/)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
 ## Install
 
 ```bash
-pip install auto-gen-py-project
+pip install --upgrade auto-gen-py-project
 ```
 
 From source:
@@ -18,6 +18,22 @@ From source:
 ```bash
 python -m pip install -e ".[dev]"
 ```
+
+### Show version
+
+```bash
+auto-gen-py-project version
+# or
+auto-gen-py-project --version
+```
+
+If PowerShell says the command is not recognized, the Scripts folder is not on `PATH`. Use:
+
+```bash
+python -m auto_gen_py_project version
+```
+
+Then run `python -m auto_gen_py_project doctor` for PATH fix instructions (common on Windows user installs).
 
 ## Quick start
 
@@ -42,7 +58,7 @@ Also available as: `python -m auto_gen_py_project …`
 | `install-template` | Install a template plugin (or local sample) |
 | `doctor` | Environment diagnostics |
 | `update` | Upgrade from PyPI |
-| `version` | Show version (`1.2.5`) |
+| `version` | Show version (`1.2.6`) |
 | `config` | Show / write user defaults |
 | `plugin list\|install\|remove` | Plugin management |
 
