@@ -48,11 +48,15 @@ app.add_typer(plugin_app, name="plugin")
 console = get_console()
 
 
+# Display name shown in version / UI (CLI entry point remains auto-gen-py-project)
+DISPLAY_NAME = "Auto-Gen-Py-Project"
+
+
 def _print_version() -> None:
     """Print the installed package version (plain + panel)."""
     # Plain line first so shells / scripts can parse easily
-    console.print(f"auto-gen-py-project {__version__}")
-    console.print(Panel(f"[bold cyan]{__version__}[/]", title="auto-gen-py-project"))
+    console.print(f"{DISPLAY_NAME} {__version__}")
+    console.print(Panel(f"[bold cyan]{__version__}[/]", title=DISPLAY_NAME))
 
 
 def _version_option(value: bool) -> None:
@@ -116,7 +120,7 @@ def _spec_from_prefs(
 
 
 def _interactive_spec(prefs: UserPreferences, default_name: str = "MyProject") -> tuple[ProjectSpec, Path]:
-    console.print(Panel("[bold cyan]auto-gen-py-project[/] interactive wizard", subtitle="create"))
+    console.print(Panel(f"[bold cyan]{DISPLAY_NAME}[/] interactive wizard", subtitle="create"))
     name = Prompt.ask("Project name", default=default_name)
     package_name = Prompt.ask("Package name", default=ProjectSpec.normalize_package_name(name))
     description = Prompt.ask("Description", default=f"{name} Python project")
@@ -340,7 +344,7 @@ def doctor_cmd() -> None:
     table = Table(title="Doctor")
     table.add_column("Check")
     table.add_column("Result")
-    table.add_row("auto-gen-py-project", __version__)
+    table.add_row(DISPLAY_NAME, __version__)
     table.add_row("python", sys.version.split()[0])
     table.add_row("platform", sys.platform)
     cli_path = shutil.which("auto-gen-py-project")

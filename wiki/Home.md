@@ -1,6 +1,6 @@
 # Wiki Home
 
-Welcome to the **auto-gen-py-project** wiki (package v1.2.7).
+Welcome to the **auto-gen-py-project** wiki (package v1.2.8).
 
 ## Pages
 
