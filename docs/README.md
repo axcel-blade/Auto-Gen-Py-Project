@@ -1,6 +1,6 @@
 # Documentation
 
-Package version: **1.3.3**
+Package version: **1.3.4**
 
 | Page | Description |
 |------|-------------|

@@ -41,7 +41,7 @@ def test_cli_version():
     result = runner.invoke(app, ["version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.3.3" in out
+    assert "1.3.4" in out
     assert "Auto-Gen-Py-Project" in out
 
 
@@ -49,7 +49,7 @@ def test_cli_version_flag():
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
     out = _out(result)
-    assert "1.3.3" in out
+    assert "1.3.4" in out
     assert "Auto-Gen-Py-Project" in out
 
 
@@ -110,10 +110,32 @@ def test_cli_init_explicit_path_creates_folder(tmp_path: Path, monkeypatch):
     assert (dest / "pyproject.toml").exists()
 
 
-def test_cli_doctor():
+def test_cli_flag_init_into_cwd(tmp_path: Path, monkeypatch):
+    """``--init`` writes a simple project into the current folder."""
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "notes.txt").write_text("keep", encoding="utf-8")
+    result = runner.invoke(app, ["--init", "--force", "--name", "devkit"])
+    assert result.exit_code == 0, _out(result)
+    assert (tmp_path / "pyproject.toml").exists()
+    assert (tmp_path / "src" / "devkit" / "__init__.py").exists()
+    assert (tmp_path / "notes.txt").read_text(encoding="utf-8") == "keep"
+
+
+def test_cli_flag_init_with_path(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    dest = tmp_path / "app"
+    result = runner.invoke(app, ["--init", "--path", str(dest), "--name", "app", "--force"])
+    assert result.exit_code == 0, _out(result)
+    assert (dest / "pyproject.toml").exists()
+
+
+def test_cli_flag_doctor():
+    result = runner.invoke(app, ["--doctor"])
+    assert result.exit_code == 0, _out(result)
+    assert "Auto-Gen-Py-Project" in _out(result)
     result = runner.invoke(app, ["doctor"])
     assert result.exit_code == 0
     out = _out(result)
     assert "Auto-Gen-Py-Project" in out
-    assert "1.3.3" in out
+    assert "1.3.4" in out
     assert "Windows, macOS, Linux" in out
